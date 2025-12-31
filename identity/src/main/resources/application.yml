@@ -1,0 +1,43 @@
+photon:
+  oauth2:
+    config:
+      - id: GOOGLE_O_AUTH_2
+        authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+        token-uri: https://oauth2.googleapis.com/token
+        user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+        redirect-uri: baseUrl/login/oauth2/code/google
+        user-name-attribute-name: sub
+      - id: OKTA_O_AUTH_2
+        authorization-uri: https://{yourOktaDomain}/oauth2/default/v1/authorize
+        token-uri: https://{yourOktaDomain}/oauth2/default/v1/token
+        user-info-uri: https://{yourOktaDomain}/oauth2/default/v1/userinfo
+        redirect-uri: baseUrl/login/oauth2/code/okta
+        user-name-attribute-name: sub
+      - id: FACEBOOK_O_AUTH_2
+        authorization-uri: https://www.facebook.com/v12.0/dialog/oauth
+        token-uri: https://graph.facebook.com/v12.0/oauth/access_token
+        user-info-uri: https://graph.facebook.com/me
+        redirect-uri: baseUrl/login/oauth2/code/facebook
+        user-name-attribute-name: id
+      - id: INSTAGRAM_O_AUTH_2
+        authorization-uri: https://api.instagram.com/oauth/authorize
+        token-uri: https://api.instagram.com/oauth/access_token
+        user-info-uri: https://graph.instagram.com/me
+        redirect-uri: baseUrl/login/oauth2/code/instagram
+        user-name-attribute-name: id
+      - id: TWITTER_O_AUTH_2
+        authorization-uri: https://api.twitter.com/2/oauth2/authorize
+        token-uri: https://api.twitter.com/2/oauth2/token
+        user-info-uri: https://api.twitter.com/2/users/me
+        redirect-uri: baseUrl/login/oauth2/code/twitter
+        user-name-attribute-name: id
+
+
+#grpc:
+#  client:
+#    alertService:
+#      address: discovery:///ALERT
+#      negotiationType: plaintext
+#      enable-keep-alive: true
+#      keep-alive-without-calls: true
+#      load-balancing-policy: round_robin

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="locality-0001-create-tables" author="assistant">
+        <createTable tableName="locality_import_status">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="job_name" type="varchar(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="last_processed_state_name" type="varchar(255)"/>
+            <column name="processed_count" type="integer" defaultValueNumeric="0"/>
+            <column name="status" type="varchar(20)" defaultValue="PENDING"/>
+            <column name="started_at" type="timestamp"/>
+            <column name="completed_at" type="timestamp"/>
+        </createTable>
+
+        <createTable tableName="state">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="code" type="varchar(10)"/>
+        </createTable>
+
+        <createTable tableName="district">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="state_id" type="bigint"/>
+            <column name="state_code" type="varchar(10)"/>
+        </createTable>
+
+        <createTable tableName="city">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(400)"/>
+            <column name="pin_code" type="varchar(20)"/>
+            <column name="state_code" type="varchar(10)"/>
+            <column name="district_id" type="bigint"/>
+        </createTable>
+
+        <createIndex indexName="idx_state_code" tableName="state">
+            <column name="code"/>
+        </createIndex>
+        <createIndex indexName="idx_district_state_id" tableName="district">
+            <column name="state_id"/>
+        </createIndex>
+        <createIndex indexName="idx_city_district_id" tableName="city">
+            <column name="district_id"/>
+        </createIndex>
+        <createIndex indexName="idx_city_pin_code" tableName="city">
+            <column name="pin_code"/>
+        </createIndex>
+        <createIndex indexName="idx_state_name_lower" tableName="state">
+            <column name="name" computed="true">LOWER(name)</column>
+        </createIndex>
+        <createIndex indexName="idx_district_name_lower" tableName="district">
+            <column name="name" computed="true">LOWER(name)</column>
+        </createIndex>
+        <createIndex indexName="idx_city_name_lower" tableName="city">
+            <column name="name" computed="true">LOWER(taluk)</column>
+        </createIndex>
+
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.photon.grpc.subscriber";
+option java_outer_classname = "SubscriberProto";
+
+package subscriber;
+
+service SubscriberService {
+  rpc CreateSubscriber (CreateSubscriberRequest) returns (CreateSubscriberResponse);
+  rpc UpdateSubscriber (UpdateSubscriberRequest) returns (CreateSubscriberResponse);
+}
+
+message CreateSubscriberRequest {
+  string user_id = 1;
+  string user_name = 2;
+  string unique_id = 3;
+  string subscriber_name = 4;
+  string subscriber_unique_id = 5;
+  string email = 6;
+  string phone_number = 7;
+  string country_code = 8;
+  string device_id = 9;
+  SubscriberStatus subscriber_status = 10;
+}
+
+message UpdateSubscriberRequest {
+  string subscriber_id = 1;
+  string user_id = 2;
+  string user_name = 3;
+  string unique_id = 4;
+  string subscriber_name = 5;
+  string subscriber_unique_id = 6;
+  string email = 7;
+  string phone_number = 8;
+  string country_code = 9;
+  string device_id = 10;
+  SubscriberStatus subscriber_status = 11;
+}
+
+message CreateSubscriberResponse {
+  string subscriber_id = 1;
+  string status = 2;
+  string message = 3;
+}
+
+enum SubscriberStatus {
+  SUBSCRIBER_STATUS_UNSPECIFIED = 0;
+  ACTIVE = 1;
+  INACTIVE = 2;
+}

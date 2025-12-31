@@ -1,0 +1,6 @@
+spring:
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_URL:http://config-server:9196}
+      name: CONSOLE
+      profile: ${SPRING_PROFILES_ACTIVE:dev}

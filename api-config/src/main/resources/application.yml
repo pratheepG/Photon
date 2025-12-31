@@ -1,0 +1,69 @@
+spring:
+  spring:
+    main:
+      allow-bean-definition-overriding: true
+
+  profiles:
+    active: native
+    include:
+      - security
+
+  cloud:
+    config:
+      server:
+        native:
+          watch:
+            enabled: true
+          search-locations: ${CONFIG_REPO_PATH:file:./config}
+
+  boot:
+    admin:
+      client:
+        enabled: true
+        url: ${SERVICE_REGISTRY_PROTOCOL:http}://${SERVICE_REGISTRY_HOST:localhost}:${SERVICE_REGISTRY_PORT:8761}/admin
+        username: ${SERVICE_REGISTRY_USER:admin}
+        password: ${SERVICE_REGISTRY_PASS:admin}
+        instance:
+          prefer-ip: true
+          metadata:
+            user.name: ${SERVICE_REGISTRY_USER:admin}
+            user.password: ${SERVICE_REGISTRY_PASS:admin}
+
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${SERVICE_REGISTRY_PROTOCOL:http}://${SERVICE_REGISTRY_HOST:localhost}:${SERVICE_REGISTRY_PORT:8761}/eureka/
+      credentials:
+        username: ${SERVICE_REGISTRY_USER:admin}
+        password: ${SERVICE_REGISTRY_PASS:admin}
+    eureka-service-url-poll-interval-seconds: 5
+    registry-fetch-interval-seconds: 5
+
+  instance:
+    lease-expiration-duration-in-seconds: 10
+    lease-renewal-interval-in-seconds: 5
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud: DEBUG
+    org.springframework.cloud.netflix.eureka: DEBUG
+    com.netflix.discovery: DEBUG
+    org.springframework.web.client.RestTemplate: TRACE
+    org.springframework.boot.context.config: DEBUG
+    com.photon: DEBUG
+
+
+photon:
+  application:
+    profile: ${PHOTON_PROFILES_ACTIVE:dev}

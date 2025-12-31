@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- ID = 5 -->
+    <changeSet id="insert-alert-template-5" author="pratheepg" runOnChange="true" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM alert_template WHERE id = '5'
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Insert ONBOARDING_LOGIN_E_MAIL template (Alert ID 3)</comment>
+        <insert tableName="alert_template">
+            <column name="id" valueNumeric="5"/>
+            <column name="template_id" value="ONBOARDING_LOGIN_E_MAIL"/>
+            <column name="alert_id" valueNumeric="3"/>
+            <column name="channel" value="E_MAIL"/>
+            <column name="subject_template" value="User Signup Alert"/>
+            <column name="message_template" value="Dear customer,
+
+Your One-Time Password for the signup photon app is ${otp}. It will expire in ${expiryInMinutes} minutes.
+
+Regards,
+Photon Team."/>
+            <column name="sms_deeplink_url" value=""/>
+            <column name="sms_media_url" value=""/>
+            <column name="created_at" valueDate="2025-11-06 16:24:23.175946"/>
+            <column name="modified_at" valueDate="2025-11-06 16:24:23.175954"/>
+        </insert>
+    </changeSet>
+
+    <!-- ID = 6 -->
+    <changeSet id="insert-alert-template-6" author="pratheepg" runOnChange="true" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM alert_template WHERE id = '6'
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Insert ONBOARDING_LOGIN_SMS template (Alert ID 3)</comment>
+        <insert tableName="alert_template">
+            <column name="id" valueNumeric="6"/>
+            <column name="template_id" value="ONBOARDING_LOGIN_SMS"/>
+            <column name="alert_id" valueNumeric="3"/>
+            <column name="channel" value="SMS"/>
+            <column name="subject_template" value=""/>
+            <column name="message_template" value="Dear customer,
+
+Your One-Time Password for the signup photon app is ${otp}. It will expire in ${expiryInMinutes} minutes."/>
+            <column name="sms_deeplink_url" value=""/>
+            <column name="sms_media_url" value=""/>
+            <column name="created_at" valueDate="2025-11-06 16:24:23.175973"/>
+            <column name="modified_at" valueDate="2025-11-06 16:24:23.175973"/>
+        </insert>
+    </changeSet>
+
+    <!-- ID = 7 -->
+    <changeSet id="insert-alert-template-7" author="pratheepg" runOnChange="true" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM alert_template WHERE id = '7'
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Insert ONBOARDING_LOGIN_WHATSAPP template (Alert ID 3)</comment>
+        <insert tableName="alert_template">
+            <column name="id" valueNumeric="7"/>
+            <column name="template_id" value="ONBOARDING_LOGIN_WHATSAPP"/>
+            <column name="alert_id" valueNumeric="3"/>
+            <column name="channel" value="WHATSAPP"/>
+            <column name="subject_template" value=""/>
+            <column name="message_template" value=""/>
+            <column name="sms_deeplink_url" value=""/>
+            <column name="sms_media_url" value=""/>
+            <column name="created_at" valueDate="2025-11-06 16:24:23.17598"/>
+            <column name="modified_at" valueDate="2025-11-06 16:24:23.175981"/>
+        </insert>
+    </changeSet>
+
+    <!-- ID = 11 -->
+    <changeSet id="insert-alert-template-11" author="pratheepg" runOnChange="true" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM alert_template WHERE id = '11'
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Insert AUTHENTICATION_LOGIN_OTP_SMS template (Alert ID 2)</comment>
+        <insert tableName="alert_template">
+            <column name="id" valueNumeric="11"/>
+            <column name="template_id" value="AUTHENTICATION_LOGIN_OTP_SMS"/>
+            <column name="alert_id" valueNumeric="2"/>
+            <column name="channel" value="SMS"/>
+            <column name="subject_template" value=""/>
+            <column name="message_template" value="Dear ${fullName},
+
+Your One-Time Password for the signup photon app is ${otp}. It will expire in ${expiryInMinutes} minutes."/>
+            <column name="sms_deeplink_url" value=""/>
+            <column name="sms_media_url" value=""/>
+            <column name="created_at" valueDate="2025-11-06 23:38:20.60582"/>
+            <column name="modified_at" valueDate="2025-11-06 23:38:20.60584"/>
+        </insert>
+    </changeSet>
+
+    <!-- ID = 2 -->
+    <changeSet id="insert-alert-template-2" author="pratheepg" runOnChange="true" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM alert_template WHERE id = '2'
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Insert AUTHENTICATION_LOGINOTP_SMS template (Alert ID 1)</comment>
+        <insert tableName="alert_template">
+            <column name="id" valueNumeric="2"/>
+            <column name="template_id" value="AUTHENTICATION_LOGINOTP_SMS"/>
+            <column name="alert_id" valueNumeric="1"/>
+            <column name="channel" value="SMS"/>
+            <column name="subject_template" value=""/>
+            <column name="message_template" value="ALERT: Dear customer your OTP is ${OTP}"/>
+            <column name="sms_deeplink_url" value=""/>
+            <column name="sms_media_url" value=""/>
+            <column name="created_at" valueDate="2025-09-14 22:26:34.133727"/>
+            <column name="modified_at" valueDate="2025-09-14 22:26:34.133732"/>
+        </insert>
+    </changeSet>
+
+    <!-- ID = 3 -->
+    <changeSet id="insert-alert-template-3" author="pratheepg" runOnChange="true" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM alert_template WHERE id = '3'
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Insert AUTHENTICATION_LOGINOTP_E_MAIL template (Alert ID 1)</comment>
+        <insert tableName="alert_template">
+            <column name="id" valueNumeric="3"/>
+            <column name="template_id" value="AUTHENTICATION_LOGINOTP_E_MAIL"/>
+            <column name="alert_id" valueNumeric="1"/>
+            <column name="channel" value="E_MAIL"/>
+            <column name="subject_template" value="URGENT: ${alertType} on ${env}"/>
+            <column name="message_template" value="An issue occurred: ${errorDetails}"/>
+            <column name="sms_deeplink_url" value=""/>
+            <column name="sms_media_url" value=""/>
+            <column name="created_at" valueDate="2025-09-14 22:26:34.133737"/>
+            <column name="modified_at" valueDate="2025-09-14 22:26:34.133737"/>
+        </insert>
+    </changeSet>
+
+    <!-- ID = 19 -->
+    <changeSet id="insert-alert-template-19" author="pratheepg" runOnChange="true" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM alert_template WHERE id='19'
+            </sqlCheck>
+        </preConditions>
+
+        <comment>User Enabled Email Template (Alert ID 5)</comment>
+        <insert tableName="alert_template">
+            <column name="id" valueNumeric="19"/>
+            <column name="template_id" value="USER_EVENT_USER_ENABLED_E_MAIL"/>
+            <column name="alert_id" valueNumeric="5"/>
+            <column name="channel" value="E_MAIL"/>
+            <column name="subject_template" value="User Profile Enabled Alert"/>
+            <column name="message_template" value="Dear customer,
+
+You Mobile Application user profile is ${statusMsg}."/>
+            <column name="sms_deeplink_url" value=""/>
+            <column name="sms_media_url" value=""/>
+            <column name="created_at" valueDate="2025-11-07 23:47:44.664011"/>
+            <column name="modified_at" valueDate="2025-11-07 23:47:44.66402"/>
+        </insert>
+    </changeSet>
+
+    <!-- ID = 20 -->
+    <changeSet id="insert-alert-template-20" author="pratheepg" runOnChange="true" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM alert_template WHERE id='20'
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Password Reset Email Template (Alert ID 6)</comment>
+        <insert tableName="alert_template">
+            <column name="id" valueNumeric="20"/>
+            <column name="template_id" value="AUTHENTICATION_LOGIN_RESET_PWD_E_MAIL"/>
+            <column name="alert_id" valueNumeric="6"/>
+            <column name="channel" value="E_MAIL"/>
+            <column name="subject_template" value="User Password Change Request"/>
+            <column name="message_template" value="Dear Customer,
+
+Your Temp password is ${password}, Please login to MyEstate application and update your new password. The password will expire in ${expiry}."/>
+            <column name="sms_deeplink_url" value=""/>
+            <column name="sms_media_url" value=""/>
+            <column name="created_at" valueDate="2025-11-09 14:57:53.746941"/>
+            <column name="modified_at" valueDate="2025-11-09 14:57:53.746973"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

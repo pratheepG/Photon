@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.photon.grpc.device";
+option java_outer_classname = "DeviceInfoProto";
+
+package device;
+
+service DeviceInfoService {
+  rpc CreateDeviceInfo(CreateDeviceInfoRequest) returns (CreateDeviceInfoResponse);
+  rpc LinkDeviceToSubscriber (LinkDeviceRequest) returns (LinkDeviceResponse);
+}
+
+message CreateDeviceInfoRequest {
+  string device_id = 1;
+  string device_type = 2;
+  string platform = 3;
+  string reg_id = 4;
+  string os_version = 5;
+  string app_version = 6;
+  string device_model = 7;
+  string device_brand = 8;
+  string browser_version = 9;
+  string screen_resolution = 10;
+  string ip_address = 11;
+  string user_agent = 12;
+}
+
+message CreateDeviceInfoResponse {
+  string id = 1;
+  string status = 2;
+  string message = 3;
+}
+
+message LinkDeviceRequest {
+  string subscriber_id = 1;
+  string device_id = 2;
+  string user_id = 3;
+}
+
+message LinkDeviceResponse {
+  string status = 1;
+  string message = 2;
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <include file="tables/api-gateway-logging-config.xml" relativeToChangelogFile="true"/>
+    <include file="tables/console-logging-config.xml" relativeToChangelogFile="true"/>
+    <include file="tables/identity-logging-config.xml" relativeToChangelogFile="true"/>
+    <include file="tables/alert-logging-config.xml" relativeToChangelogFile="true"/>
+    <include file="tables/storage-logging-config.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <changeSet id="5" author="pratheepg">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM auth_type WHERE id = 'OOB_STATIC_PWD'
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="auth_type">
+            <column name="id" value="OOB_STATIC_PWD"/>
+            <column name="name" value="OOB_STATIC_PWD"/>
+            <column name="description" value="Authentication using Username and Password"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="auth_adapter" value="STATIC_PWD"/>
+            <column name="config" value='{"maxLoginAttempts":3,"captchaNeededOnAttempts":2,"isCaptchaEnabled":true,"isAutoUnlockEnabled":true,"autoUnLockAfterInMinutes":30,"passwordExpiryInMinutes":7200}' />
+        </insert>
+    </changeSet>
+
+<!--    <changeSet id="6" author="pratheepg">-->
+<!--        <preConditions onFail="MARK_RAN">-->
+<!--            <sqlCheck expectedResult="0">-->
+<!--                SELECT COUNT(*) FROM auth_type WHERE id = 'OOB_SMS_OTP'-->
+<!--            </sqlCheck>-->
+<!--        </preConditions>-->
+<!--        <insert tableName="auth_type">-->
+<!--            <column name="id" value="OOB_SMS_OTP"/>-->
+<!--            <column name="name" value="OOB_SMS_OTP"/>-->
+<!--            <column name="description" value="Authentication using SMS One-Time Password"/>-->
+<!--            <column name="is_active" valueBoolean="true"/>-->
+<!--            <column name="auth_adapter" value="SMS_OTP"/>-->
+<!--            <column name="config" value='{"maxOtpAttempts":5,"resendOtpInSeconds":30,"otpExpiryInMinutes":10,"maxAttemptResetAfterMinutes":15,"otpLength":6}'/>-->
+<!--        </insert>-->
+<!--    </changeSet>-->
+
+<!--    <changeSet id="7" author="pratheepg">-->
+<!--        <preConditions onFail="MARK_RAN">-->
+<!--            <sqlCheck expectedResult="0">-->
+<!--                SELECT COUNT(*) FROM auth_type WHERE id = 'OOB_EML_OTP'-->
+<!--            </sqlCheck>-->
+<!--        </preConditions>-->
+<!--        <insert tableName="auth_type">-->
+<!--            <column name="id" value="OOB_EML_OTP"/>-->
+<!--            <column name="name" value="OOB_EML_OTP"/>-->
+<!--            <column name="description" value="Authentication using EMAIL One-Time Password"/>-->
+<!--            <column name="is_active" valueBoolean="true"/>-->
+<!--            <column name="auth_adapter" value="EML_OTP"/>-->
+<!--            <column name="config" value='{"maxOtpAttempts":5,"resendOtpInSeconds":30,"otpExpiryInMinutes":10,"maxAttemptResetAfterMinutes":15,"otpLength":6}'/>-->
+<!--        </insert>-->
+<!--    </changeSet>-->
+
+<!--    <changeSet id="8" author="pratheepg">-->
+<!--        <preConditions onFail="MARK_RAN">-->
+<!--            <sqlCheck expectedResult="0">-->
+<!--                SELECT COUNT(*) FROM auth_type WHERE id = 'OOB_ACTIVATION_CODE'-->
+<!--            </sqlCheck>-->
+<!--        </preConditions>-->
+<!--        <insert tableName="auth_type">-->
+<!--            <column name="id" value="OOB_ACTIVATION_CODE"/>-->
+<!--            <column name="name" value="OOB_ACTIVATION_CODE"/>-->
+<!--            <column name="description" value="Authentication using ACTIVATION_CODE"/>-->
+<!--            <column name="is_active" valueBoolean="true"/>-->
+<!--            <column name="credential_expiry_in_minutes" valueNumeric="7200"/>-->
+<!--            <column name="auth_adapter" value="ACTIVATION_CODE"/>-->
+<!--        </insert>-->
+<!--    </changeSet>-->
+
+<!--    <changeSet id="9" author="pratheepg">-->
+<!--        <preConditions onFail="MARK_RAN">-->
+<!--            <sqlCheck expectedResult="0">-->
+<!--                SELECT COUNT(*) FROM auth_type WHERE id = 'OOB_TMP_PWD'-->
+<!--            </sqlCheck>-->
+<!--        </preConditions>-->
+<!--        <insert tableName="auth_type">-->
+<!--            <column name="id" value="OOB_TMP_PWD"/>-->
+<!--            <column name="name" value="OOB_TMP_PWD"/>-->
+<!--            <column name="description" value="Authentication using TMP_PWD"/>-->
+<!--            <column name="is_active" valueBoolean="true"/>-->
+<!--            <column name="credential_expiry_in_minutes" valueNumeric="7200"/>-->
+<!--            <column name="auth_adapter" value="TMP_PWD"/>-->
+<!--        </insert>-->
+<!--    </changeSet>-->
+
+<!--    <changeSet id="10" author="pratheepg">-->
+<!--        <preConditions onFail="MARK_RAN">-->
+<!--            <sqlCheck expectedResult="0">-->
+<!--                SELECT COUNT(*) FROM auth_type WHERE id = 'OOB_PUSH_APPROVE'-->
+<!--            </sqlCheck>-->
+<!--        </preConditions>-->
+<!--        <insert tableName="auth_type">-->
+<!--            <column name="id" value="OOB_PUSH_APPROVE"/>-->
+<!--            <column name="name" value="OOB_PUSH_APPROVE"/>-->
+<!--            <column name="description" value="Authentication using PUSH_APPROVE"/>-->
+<!--            <column name="is_active" valueBoolean="true"/>-->
+<!--            <column name="credential_expiry_in_minutes" valueNumeric="1"/>-->
+<!--            <column name="auth_adapter" value="PUSH_APPROVE"/>-->
+<!--        </insert>-->
+<!--    </changeSet>-->
+
+</databaseChangeLog>

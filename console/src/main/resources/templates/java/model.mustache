@@ -1,0 +1,26 @@
+package com.photon.{{moduleIdLower}}.models;
+
+import java.util.*;
+import java.time.*;
+
+/**
+ * Auto-generated model: {{className}}
+ */
+public class {{className}} {
+
+{{#properties}}
+    private {{type}} {{name}};
+{{/properties}}
+
+    public {{className}}() {}
+
+{{#properties}}
+    public {{type}} get{{capName}}() { return {{name}}; }
+    public void set{{capName}}({{type}} {{name}}) { this.{{name}} = {{name}}; }
+{{/properties}}
+
+    @Override
+    public String toString() {
+        return "{{className}}{}";
+    }
+}

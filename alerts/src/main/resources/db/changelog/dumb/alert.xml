@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- ID = 1 -->
+    <changeSet id="insert-alert-1" author="pratheepg" runOnChange="true" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM alert WHERE id = '1'
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Insert alert AUTHENTICATION:USER_PASSWORD_CHANGE</comment>
+        <insert tableName="alert">
+            <column name="id" valueNumeric="1"/>
+            <column name="alert_type" value="AUTHENTICATION"/>
+            <column name="alert_sub_type" value="USER_PASSWORD_CHANGE"/>
+            <column name="audience" value="INDIVIDUAL"/>
+            <column name="topic" value=""/>
+            <column name="created_at" valueDate="2025-09-14 19:34:08.276215"/>
+            <column name="modified_at" valueDate="2025-11-06 23:15:32.678548"/>
+        </insert>
+    </changeSet>
+
+    <!-- ID = 2 -->
+    <changeSet id="insert-alert-2" author="pratheepg" runOnChange="true" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM alert WHERE id = '2'
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Insert alert AUTHENTICATION:LOGIN_OTP</comment>
+        <insert tableName="alert">
+            <column name="id" valueNumeric="2"/>
+            <column name="alert_type" value="AUTHENTICATION"/>
+            <column name="alert_sub_type" value="LOGIN_OTP"/>
+            <column name="audience" value="INDIVIDUAL"/>
+            <column name="topic" value=""/>
+            <column name="created_at" valueDate="2025-11-06 23:26:54.651715"/>
+            <column name="modified_at" valueDate="2025-11-06 23:38:20.590391"/>
+        </insert>
+    </changeSet>
+
+    <!-- ID = 5 -->
+    <changeSet id="insert-alert-5" author="pratheepg" runOnChange="true" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM alert WHERE id = '5'
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Insert alert USER_EVENT:USER_ENABLED</comment>
+        <insert tableName="alert">
+            <column name="id" valueNumeric="5"/>
+            <column name="alert_type" value="USER_EVENT"/>
+            <column name="alert_sub_type" value="USER_ENABLED"/>
+            <column name="audience" value="INDIVIDUAL"/>
+            <column name="topic" value=""/>
+            <column name="created_at" valueDate="2025-11-07 02:57:26.237847"/>
+            <column name="modified_at" valueDate="2025-11-07 23:47:44.569846"/>
+        </insert>
+    </changeSet>
+
+    <!-- ID = 6 -->
+    <changeSet id="insert-alert-6" author="pratheepg" runOnChange="true" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM alert WHERE id = '6'
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Insert alert AUTHENTICATION:LOGIN_RESET_PWD</comment>
+        <insert tableName="alert">
+            <column name="id" valueNumeric="6"/>
+            <column name="alert_type" value="AUTHENTICATION"/>
+            <column name="alert_sub_type" value="LOGIN_RESET_PWD"/>
+            <column name="audience" value="INDIVIDUAL"/>
+            <column name="topic" value=""/>
+            <column name="created_at" valueDate="2025-11-09 14:54:28.092975"/>
+            <column name="modified_at" valueDate="2025-11-09 14:57:53.698897"/>
+        </insert>
+    </changeSet>
+
+    <!-- ID = 3 -->
+    <changeSet id="insert-alert-3" author="pratheepg" runOnChange="true" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM alert WHERE id = '3'
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Insert alert ONBOARDING:LOGIN_OTP</comment>
+        <insert tableName="alert">
+            <column name="id" valueNumeric="3"/>
+            <column name="alert_type" value="ONBOARDING"/>
+            <column name="alert_sub_type" value="LOGIN_OTP"/>
+            <column name="audience" value="INDIVIDUAL"/>
+            <column name="topic" value=""/>
+            <column name="created_at" valueDate="2025-09-14 22:44:04.369337"/>
+            <column name="modified_at" valueDate="2025-11-06 16:24:23.163753"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,191 @@
+spring:
+  server:
+    http2:
+      enabled: true
+    compression:
+      enabled: true
+      mime-types: application/json,text/plain
+      min-response-size: 2KB
+  webflux:
+    hiddenmethod:
+      filter:
+        enabled: false
+  mvc:
+    pathmatch:
+      matching-strategy: path-pattern-parser
+  cloud:
+    gateway:
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:8282"
+              - "http://localhost:9001"
+              - "http://localhost:5173"
+              - "http://localhost:5174"
+              - "http://windowshost:8282"
+              - "http://windowshost:9001"
+              - "http://windowshost:5173"
+              - "http://windowshost:5174"
+            allowedMethods:
+              - GET
+              - POST
+              - PATCH
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+      # ====== ROUTES ======
+      routes:
+        - id: CONSOLE_BASIC_AUTHENTICATED
+          uri: lb://CONSOLE
+          order: 1
+          predicates:
+            - Path=/server-console/**
+          filters:
+            - BasicAuthGatewayFilter
+
+        - id: CONSOLE
+          uri: lb://CONSOLE
+          order: 0
+          predicates:
+            - Path=/api-manager/**, /api-config/**, /deployment/**
+          filters:
+            - name: JWTAuthGatewayFilter
+              args:
+                roles: "SERVER_CONSOLE_ADMIN_ROLE|ADMIN"
+                idps: "SC_IDP"
+            - name: RequestSize
+              args:
+                maxSize: 150MB
+
+        - id: IDENTITY_BASIC_AUTHENTICATED
+          uri: lb://IDENTITY
+          order: 1
+          predicates:
+            - Path=/authentication/login, /authentication/init, /user/register-first-user, /identity-meta/**, /user-device/**, /onboarding/**
+          filters:
+            - BasicAuthGatewayFilter
+
+        - id: IDENTITY_FULL_AUTHENTICATED
+          uri: lb://IDENTITY
+          order: 150
+          predicates:
+            - Path=/user/register, /user/get-user, /user/get-user-details, /user/get-user-list, /user/create-user, /user/update-user-status, /user/update-user-by-admin, /authentication/logout, /authentication/request-for-temp-password/**, /certs/**, /role/**, /tenants/**, /identity-provider/**, /mfa-condition/**, /sca-configuration/**, /auth-type/**
+          filters:
+            - name: JWTAuthGatewayFilter
+              args:
+                roles: "SERVER_CONSOLE_ADMIN_ROLE|ADMIN"
+                idps: "SC_IDP"
+
+        - id: IDENTITY_ACTIVATE_AUTH
+          uri: lb://IDENTITY
+          order: 0
+          predicates:
+            - Path=/authentication/change-user-password
+          filters:
+            - name: JWTAuthGatewayFilter
+              args:
+                roles: "ACTIVATE_AUTH|OWNER"
+                idps: "*"
+
+        - id: API-CONFIG_FULL_AUTHENTICATED
+          uri: lb://API-CONFIG
+          order: 150
+          predicates:
+            - Path=/config-properties/**
+          filters:
+            - name: JWTAuthGatewayFilter
+              args:
+                roles: "SERVER_CONSOLE_ADMIN_ROLE|ADMIN"
+                idps: "SC_IDP"
+
+        - id: API-CLIENT-CONFIG_BASIC_AUTHENTICATED
+          uri: lb://API-CONFIG
+          order: 150
+          predicates:
+            - Path=/client-config-properties
+            - Method=GET
+          filters:
+            - name: BasicAuthGatewayFilter
+
+#        - id: LOCALITIES_BASIC_AUTHENTICATED
+#          uri: lb://CONTENT
+#          order: 0
+#          predicates:
+#            - Path=/api/v1/locality/**
+#          filters:
+#            - BasicAuthGatewayFilter
+
+        - id: ALERT_FULL_AUTHENTICATED
+          uri: lb://ALERT
+          order: 150
+          predicates:
+            - Path=/alerts/**
+          filters:
+            - name: JWTAuthGatewayFilter
+              args:
+                roles: "SERVER_CONSOLE_ADMIN_ROLE|ADMIN"
+                idps: "SC_IDP"
+
+      # ====== PERFORMANCE TUNING ======
+      httpclient:
+        connect-timeout: 5000   # 5s
+        response-timeout: 60s   # Timeout for backend service
+        pool:
+          type: fixed
+          max-connections: 1000  # Increase if heavy concurrent requests
+          acquire-timeout: 1000  # 1s to wait for connection
+        wiretap: false
+      httpserver:
+        wiretap: false
+
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+        - PreserveHostHeader
+
+      # ==== Enable route caching (helps large route sets) ====
+      discovery:
+        locator:
+          enabled: false
+
+# ====== LOGGING ======
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
+    reactor.netty.http.client: WARN
+
+# ====== ACTUATOR & METRICS ======
+management:
+  tracing:
+    enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway,metrics,prometheus
+  metrics:
+    tags:
+      application: api-gateway
+
+# ==== Resilience (timeouts, retries, circuit breakers) ====
+resilience4j:
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 30s
+  retry:
+    configs:
+      default:
+        maxAttempts: 3
+        waitDuration: 200ms
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 100
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s

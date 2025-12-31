@@ -1,0 +1,101 @@
+spring:
+  boot:
+    admin:
+      client:
+        enabled: true
+        url: http://localhost:8761/admin
+        username: 4a7f3176-f664-45b1-89f4-21f6840889b3
+        password: 2d1b4ddf-d708-414d-8db5-05687a2da57b
+        instance:
+          prefer-ip: true
+          metadata:
+            user.name: 4a7f3176-f664-45b1-89f4-21f6840889b3
+            user.password: 2d1b4ddf-d708-414d-8db5-05687a2da57b
+
+  redis:
+    host: windowshost
+    port: 6379
+    timeout: 60000
+    password: 
+
+  event:
+    broker: kafka
+
+  kafka:
+    bootstrap-servers: windowshost:9092
+    consumer:
+      auto-offset-reset: earliest
+
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://4a7f3176-f664-45b1-89f4-21f6840889b3:2d1b4ddf-d708-414d-8db5-05687a2da57b@localhost:8761/eureka/
+      credentials:
+        username: 4a7f3176-f664-45b1-89f4-21f6840889b3
+        password: 2d1b4ddf-d708-414d-8db5-05687a2da57b
+    eureka-service-url-poll-interval-seconds: 5
+    registry-fetch-interval-seconds: 5
+
+  instance:
+    lease-expiration-duration-in-seconds: 10
+    lease-renewal-interval-in-seconds: 5
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+
+cache:
+  type: REDIS
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+photon:
+  api:
+    key: 4a7f3176-f664-45b1-89f4-21f6840889b3
+    secret: 2d1b4ddf-d708-414d-8db5-05687a2da57b
+
+  grpc:
+    alert:
+      host: localhost
+      port: 7479
+    console:
+      host: localhost
+      port: 7477
+    identity:
+      host: photon-identity
+      port: 7474
+    storage:
+      host: photon-storage
+      port: 7478
+
+grpc:
+  client:
+    alert:
+      address: discovery:///ALERT
+      negotiationType: plaintext
+      enable-keep-alive: true
+      keep-alive-without-calls: true
+      load-balancing-policy: round_robin
+    console:
+      address: discovery:///CONSOLE
+      negotiationType: plaintext
+      enable-keep-alive: true
+      keep-alive-without-calls: true
+      load-balancing-policy: round_robin
+    identity:
+      address: discovery:///IDENTITY
+      negotiationType: plaintext
+      enable-keep-alive: true
+      keep-alive-without-calls: true
+      load-balancing-policy: round_robin
+    storage:
+      address: discovery:///STORAGE
+      negotiationType: plaintext
+      enable-keep-alive: true
+      keep-alive-without-calls: true
+      load-balancing-policy: round_robin

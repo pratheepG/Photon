@@ -1,0 +1,12 @@
+import { {{#imports}}{{.}},{{/imports}} } from '../models';
+
+export class {{repoClassName}} {
+{{#methods}}
+  /**
+   * {{description}}
+   */
+  public async {{methodName}}({{#hasRequest}}body: {{requestType}}{{/hasRequest}}): Promise<{{returnType}}> {
+    throw new Error('Implementation provided at combine-time');
+  }
+{{/methods}}
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="20251119-create-gateway-limits" author="you">
+        <createTable tableName="gateway_limits">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="key_name" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="value_bigint" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="description" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20251119-seed-gateway-limits" author="you">
+        <insert tableName="gateway_limits">
+            <column name="key_name" value="MAX_IN_MEMORY_SIZE_BYTES"/>
+            <column name="value_bigint" valueNumeric="524288000"/>
+            <column name="description" value="Max in-memory size for multipart uploads (bytes)"/>
+        </insert>
+
+        <insert tableName="gateway_limits">
+            <column name="key_name" value="MAX_REQUEST_SIZE_BYTES"/>
+            <column name="value_bigint" valueNumeric="524288000"/>
+            <column name="description" value="Max request size for multipart uploads (bytes)"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

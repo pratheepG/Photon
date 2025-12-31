@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-cert-dev-20250914" author="assistant">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM certificate WHERE alias = 'jwtkey-dev'
+            </sqlCheck>
+        </preConditions>
+
+        <insert tableName="certificate">
+            <column name="certificate_name" value="OOB Photon - Dev"/>
+            <column name="alias" value="jwtkey-dev"/>
+            <column name="keystore_password" value="Pratheep@1994"/>
+            <column name="key_password" value="Pratheep@1994"/>
+            <column name="keystore" valueComputed="decode('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', 'base64')"/>
+            <column name="keystore_type" value="JKS"/>
+            <column name="issuer" value="photon"/>
+            <column name="subject" value="CN=pratheep,OU=Photon,O=Photon,L=Kanyakumari,ST=Tamil-Nadu,C=IN"/>
+            <column name="valid_from" valueDate="2025-09-14 00:00:00"/>
+            <column name="valid_to" valueDate="2026-09-14 00:00:00"/>
+            <column name="serial_number" value="20250914"/>
+            <column name="signature_algorithm" value="SHA256withRSA"/>
+            <column name="country_name" value="IN"/>
+            <column name="state_name" value="Tamil-Nadu"/>
+            <column name="locality_name" value="Kanyakumari"/>
+            <column name="organization_name" value="Photon"/>
+            <column name="organizational_unit_name" value="Photon"/>
+            <column name="host_name" value="localhost"/>
+            <column name="email_address" value="pratheep.gvs@gmail.com"/>
+            <column name="certificate_type" value="Server"/>
+            <column name="certificate_chain" valueComputed="NULL"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

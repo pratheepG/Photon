@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="pratheepg" runOnChange="true">
+        <sqlFile path="db/migration/V1.0__alert_template.sql" />
+    </changeSet>
+    <changeSet id="2" author="pratheepg" runOnChange="true">
+        <sqlFile path="db/migration/V1.1__alert.sql" />
+    </changeSet>
+    <changeSet id="3" author="pratheepg" runOnChange="true">
+        <sqlFile path="db/migration/V1.2__alert_history.sql" />
+    </changeSet>
+    <changeSet id="4" author="pratheepg" runOnChange="true">
+        <sqlFile path="db/migration/V1.3__dead_letter_alert.sql" />
+    </changeSet>
+    <changeSet id="5" author="pratheepg" runOnChange="true">
+        <sqlFile path="db/migration/V1.4__subscriber.sql" />
+    </changeSet>
+    <changeSet id="6" author="pratheepg" runOnChange="true">
+        <sqlFile path="db/migration/V1.5__remote_attachment.sql" />
+    </changeSet>
+    <changeSet id="7" author="pratheepg" runOnChange="true">
+        <sqlFile path="db/migration/V1.6__device_info.sql" />
+    </changeSet>
+    <changeSet id="8" author="pratheepg" runOnChange="true">
+        <sqlFile path="db/migration/V1.7__subscription_topic.sql" />
+    </changeSet>
+    <changeSet id="9" author="pratheepg" runOnChange="true">
+        <sqlFile path="db/migration/V1.8__subscriber_channel_preference.sql" />
+    </changeSet>
+    <changeSet id="10" author="pratheepg" runOnChange="true">
+        <sqlFile path="db/migration/V1.9__subscriber_device_map.sql" />
+    </changeSet>
+
+
+    <include file="dumb/alert.xml" relativeToChangelogFile="true"/>
+    <include file="dumb/alert-template.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

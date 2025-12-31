@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="alert-logging-config" author="pratheepg" runOnChange="true" runAlways="true">
+
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM config_properties WHERE id = 'ALERT-LOGGING'
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Insert logging config for ALERT or SPRING_APP_NAME-based app</comment>
+        <insert tableName="config_properties">
+            <column name="id" value="ALERT-LOGGING"/>
+            <column name="profile" value="${photonProfilesActive}"/>
+            <column name="config"
+                    value="{
+                        &quot;logging.level.root&quot;: &quot;ERROR&quot;,
+                        &quot;logging.level.org.springframework&quot;: &quot;ERROR&quot;,
+                        &quot;logging.level.com.photon&quot;: &quot;ERROR&quot;,
+                        &quot;logging.level.org.springframework.http.converter&quot;: &quot;ERROR&quot;,
+                        &quot;logging.level.org.springframework.web.reactive.function.client.ExchangeFunctions&quot;: &quot;ERROR&quot;,
+                        &quot;logging.level.org.springframework.web&quot;: &quot;ERROR&quot;
+                    }"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

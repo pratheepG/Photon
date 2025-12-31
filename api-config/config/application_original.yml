@@ -1,0 +1,101 @@
+spring:
+  boot:
+    admin:
+      client:
+        enabled: true
+        url: ${SERVICE_REGISTRY_PROTOCOL:http}://${SERVICE_REGISTRY_HOST:localhost}:${SERVICE_REGISTRY_PORT:8761}/admin
+        username: ${SERVICE_REGISTRY_USER:admin}
+        password: ${SERVICE_REGISTRY_PASS:admin}
+        instance:
+          prefer-ip: true
+          metadata:
+            user.name: ${SERVICE_REGISTRY_USER:admin}
+            user.password: ${SERVICE_REGISTRY_PASS:admin}
+
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    timeout: ${REDIS_TIMEOUT:60000}
+    password: ${REDIS_PASSWORD:}
+
+  event:
+    broker: ${SPRING_EVENT_BROKER:kafka}
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      auto-offset-reset: ${KAFKA_CONSUMER_AUTO_OFFSET_RESET:earliest}
+
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${SERVICE_REGISTRY_PROTOCOL:http}://${SERVICE_REGISTRY_USER:admin}:${SERVICE_REGISTRY_PASS:admin}@${SERVICE_REGISTRY_HOST:localhost}:${SERVICE_REGISTRY_PORT:8761}/eureka/
+      credentials:
+        username: ${SERVICE_REGISTRY_USER:admin}
+        password: ${SERVICE_REGISTRY_PASS:admin}
+    eureka-service-url-poll-interval-seconds: 5
+    registry-fetch-interval-seconds: 5
+
+  instance:
+    lease-expiration-duration-in-seconds: 10
+    lease-renewal-interval-in-seconds: 5
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+
+cache:
+  type: ${CACHE_TYPE:REDIS}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+photon:
+  api:
+    key: ${SERVICE_REGISTRY_USER:admin}
+    secret: ${SERVICE_REGISTRY_PASS:admin}
+
+  grpc:
+    alert:
+      host: ${PHOTON_ALERT_GRPC_HOST:photon-alert}
+      port: ${PHOTON_ALERT_GRPC_PORT:7479}
+    console:
+      host: ${PHOTON_CONSOLE_GRPC_HOST:photon-console}
+      port: ${PHOTON_CONSOLE_GRPC_PORT:7477}
+    identity:
+      host: ${PHOTON_IDENTITY_GRPC_HOST:photon-identity}
+      port: ${PHOTON_IDENTITY_GRPC_PORT:7474}
+    storage:
+      host: ${PHOTON_STORAGE_GRPC_HOST:photon-storage}
+      port: ${PHOTON_STORAGE_GRPC_PORT:7478}
+
+grpc:
+  client:
+    alert:
+      address: discovery:///${PHOTON_ALERT_APPLICATION:ALERT}
+      negotiationType: plaintext
+      enable-keep-alive: true
+      keep-alive-without-calls: true
+      load-balancing-policy: round_robin
+    console:
+      address: discovery:///${PHOTON_CONSOLE_APPLICATION:CONSOLE}
+      negotiationType: plaintext
+      enable-keep-alive: true
+      keep-alive-without-calls: true
+      load-balancing-policy: round_robin
+    identity:
+      address: discovery:///${PHOTON_IDENTITY_APPLICATION:IDENTITY}
+      negotiationType: plaintext
+      enable-keep-alive: true
+      keep-alive-without-calls: true
+      load-balancing-policy: round_robin
+    storage:
+      address: discovery:///${PHOTON_STORAGE_APPLICATION:STORAGE}
+      negotiationType: plaintext
+      enable-keep-alive: true
+      keep-alive-without-calls: true
+      load-balancing-policy: round_robin

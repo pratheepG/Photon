@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="api-gateway-logging-config" author="pratheepg" runOnChange="true" runAlways="true">
+
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM config_properties WHERE id = 'API-GATEWAY-LOGGING'
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Insert initial logging config for API Gateway</comment>
+        <insert tableName="config_properties">
+            <column name="id" value="API-GATEWAY-LOGGING"/>
+            <column name="profile" value="${photonProfilesActive}"/>
+            <column name="config"
+                    value="{
+                        &quot;logging.level.org.springframework.security&quot;: &quot;ERROR&quot;,
+                        &quot;Djavax.net.debug&quot;: &quot;SSL,keymanager,trustmanager,ssl:handshake&quot;,
+                        &quot;logging.level.javax&quot;: &quot;ERROR&quot;,
+                        &quot;logging.level.net&quot;: &quot;ERROR&quot;,
+                        &quot;logging.level.org.flywaydb&quot;: &quot;ERROR&quot;,
+                        &quot;logging.level.org.springframework&quot;: &quot;ERROR&quot;
+                    }"
+            />
+        </insert>
+    </changeSet>
+</databaseChangeLog>

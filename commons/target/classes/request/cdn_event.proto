@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "com.photon.storage.proto";
+option java_outer_classname = "CdnEventProto";
+option java_multiple_files = true;
+
+message CdnEvent {
+  string metaId = 1;
+  string entityId = 2;
+  CDNOperation operation = 3;
+}
+
+enum CDNOperation {
+  UPDATE = 0;
+  REMOVE = 1;
+}

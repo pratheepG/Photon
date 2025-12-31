@@ -1,0 +1,18 @@
+# src/main/resources/application.yaml
+
+spring:
+  application:
+    # Use 'application.name' instead of 'cloud.config.name'
+    name: ${SPRING_APP_NAME:CONTENT}
+  config:
+    # This is the crucial property for making the Config Client active
+    import: "configserver:"
+  cloud:
+    config:
+      # Use 'cloud.config.uri' to point to the server
+      uri: ${CONFIG_SERVER_URL:http://config-server:9196}
+
+# The profile setting is typically managed by the command line or environment variables,
+# but if you need a default profile, it's defined here:
+profiles:
+  active: ${SPRING_PROFILES_ACTIVE:dev}

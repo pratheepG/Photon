@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="11" author="pratheepg">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM identity_provider WHERE id = 'IDP001'
+            </sqlCheck>
+        </preConditions>
+
+        <insert tableName="identity_provider">
+            <column name="id" value="SC_IDP"/>
+            <column name="name" value="Server Console IDP"/>
+            <column name="description" value="Server Console Identity Provider"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="idp_default_role" valueNumeric="1"/>
+            <column name="identity_provider_type" value="LOGIN"/>
+            <column name="signature_algorithm" value="RS256"/>
+            <column name="cert_id" valueNumeric="1"/>
+            <column name="session_timeout_minutes" valueNumeric="30"/>
+            <column name="session_idle_timeout_minutes" valueNumeric="5"/>
+            <column name="active_sessions" valueNumeric="10"/>
+            <column name="refresh_token_session_timeout_minutes" valueNumeric="1440"/>
+            <column name="is_mfa_enabled" valueBoolean="false"/>
+            <column name="is_mfa_required_for_every_login" valueBoolean="false"/>
+            <column name="is_mfa_condition_check_enabled" valueBoolean="false"/>
+            <column name="include_x509_in_jwt" valueBoolean="false"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

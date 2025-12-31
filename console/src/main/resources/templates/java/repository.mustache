@@ -1,0 +1,24 @@
+package com.photon.{{moduleIdLower}}.repository;
+
+{{#imports}}
+import {{.}};
+{{/imports}}
+
+import java.util.*;
+
+/**
+ * Auto-generated repository: {{repoClassName}}
+ */
+public class {{repoClassName}} {
+
+{{#methods}}
+    /**
+     * {{description}}
+     */
+    public {{{returnType}}} {{methodName}}({{#hasRequest}}{{{requestType}}} body{{/hasRequest}}) {
+        // Implementation provided at combine-time by combined SDK (ApiManager).
+        throw new UnsupportedOperationException("Implementation provided at combine-time");
+    }
+
+{{/methods}}
+}

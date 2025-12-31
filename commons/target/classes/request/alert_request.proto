@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+option java_package = "com.photon.alerts.proto";
+option java_outer_classname = "AlertRequestProto";
+option java_multiple_files = true;
+
+message RemoteAttachment {
+  string fileName = 1;
+  string downloadUrl = 2;
+}
+
+message AlertRequest {
+  string alertType = 1;
+  string alertSubType = 2;
+  string status = 3;
+  map<string, string> placeholders = 4;
+  bool isPassword = 5;
+  repeated RemoteAttachment remoteAttachment = 6;
+  string smsDeeplinkUrl = 7;
+  string smsMediaUrl = 8;
+  bool isPreLogin = 9;
+  string phoneNumber = 10;
+  string countryCode = 11;
+  string email = 12;
+  Channel channel = 13;
+  AlertAudience alertAudience = 14;
+  string userId = 15;
+  string topic = 16;
+}
+
+enum AlertAudience {
+    BROADCAST = 0;
+    INDIVIDUAL = 1;
+    TOPIC = 2;
+}
+
+enum Channel {
+    SMS = 0;
+    E_MAIL = 1;
+    WHATSAPP = 2;
+    PUSH_NOTIFICATION = 3;
+    IN_APP_NOTIFICATION = 4;
+    CAMPAIGN = 5;
+    ALL = 6;
+}

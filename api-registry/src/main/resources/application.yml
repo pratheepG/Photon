@@ -1,0 +1,40 @@
+server:
+  port: ${SERVER_PORT:8761}
+  shutdown: graceful
+
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+
+  security:
+    user:
+      name: 4a7f3176-f664-45b1-89f4-21f6840889b3
+      password: 2d1b4ddf-d708-414d-8db5-05687a2da57b
+
+  application:
+    name: API-REGISTRY
+
+  boot:
+    admin:
+      discovery:
+        enabled: true
+      context-path: /admin
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+# Host both Eureka Server and SBA
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false

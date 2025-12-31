@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="SC_IDP_SERVER_CONSOLE_ADMIN_ROLE" author="pratheepg">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM role WHERE role_id = 'SERVER_CONSOLE_ADMIN_ROLE'
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="role">
+            <column name="role_id" value="SERVER_CONSOLE_ADMIN_ROLE"/>
+            <column name="name" value="SERVER_CONSOLE_ADMIN_ROLE"/>
+            <column name="description" value="Server Console Admin Role for the IDP : SC_IDP"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="access_level" value="ADMIN"/>
+            <column name="idp" value="SC_IDP"/>
+            <column name="feature_actions" value="{}"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

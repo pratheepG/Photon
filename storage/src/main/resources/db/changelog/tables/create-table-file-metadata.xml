@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="enable-pgcrypto" author="pratheepg">
+        <sql>CREATE EXTENSION IF NOT EXISTS "pgcrypto";</sql>
+    </changeSet>
+
+    <changeSet id="create-table-file-metadata" author="pratheepg">
+        <createTable tableName="file_metadata">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="original_name" type="VARCHAR(255)"/>
+            <column name="stored_name" type="VARCHAR(255)"/>
+            <column name="content_type" type="VARCHAR(100)"/>
+            <column name="size" type="BIGINT"/>
+            <column name="url" type="TEXT"/>
+            <column name="uploaded_by" type="VARCHAR(255)"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+            <column name="uploaded_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="access_level" type="VARCHAR(20)"/>
+            <column name="file_hash" type="VARCHAR(128)"/>
+            <column name="associated_entity_id" type="VARCHAR(255)"/>
+            <column name="is_deleted" type="BOOLEAN" defaultValueBoolean="false"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

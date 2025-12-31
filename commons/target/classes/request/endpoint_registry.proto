@@ -1,0 +1,136 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.photon.grpc.endpoint";
+option java_outer_classname = "EndpointRegistryProto";
+option go_package = "endpointregistrypb";
+
+package photon.endpoint;
+
+enum BaseType {
+  BASE_UNKNOWN = 0;
+  BASE_STRING = 1;
+  BASE_INTEGER = 2;
+  BASE_LONG = 3;
+  BASE_BOOLEAN = 4;
+  BASE_FLOAT = 5;
+  BASE_DOUBLE = 6;
+  BASE_DATE = 7;
+  BASE_OBJECT = 8;
+  BASE_LIST = 9;
+  BASE_SET = 10;
+  BASE_MAP = 11;
+}
+
+enum SecurityLevel {
+  SEC_UNKNOWN = 0;
+  PUBLIC = 1;
+  AUTHENTICATED = 2;
+  ANONYMOUS = 3;
+  PRIVATE = 4;
+}
+
+enum AccessLevel {
+  ACCESS_UNKNOWN = 0;
+  NONE = 1;
+  VIEWER = 2;
+  EDITOR = 3;
+  OWNER = 4;
+  ADMIN = 5;
+  TENANT_ADMIN = 6;
+}
+
+enum RequestMethod {
+  RM_UNKNOWN = 0;
+  GET = 1;
+  HEAD = 2;
+  POST = 3;
+  PUT = 4;
+  PATCH = 5;
+  DELETE = 6;
+  OPTIONS = 7;
+  TRACE = 8;
+}
+
+message LongStringMap {
+  map<int64, string> entries = 1;
+}
+
+message UserRolesMap {
+  map<string, LongStringMap> entries = 1;
+}
+
+message ActionModel {
+  string key = 1;
+  string modelId = 2;
+  bool isCollection = 3;
+}
+
+message ActionMultipart {
+  string key = 1;
+  bool isCollection = 3;
+}
+
+message ActionParam {
+  string key = 1;
+  BaseType type = 2;
+  string isCollection = 3;
+}
+
+message ModelField {
+  string name = 1;
+  BaseType type = 2;
+  string referenceType = 3;
+}
+
+message ModelDescription {
+  string id = 1;
+  string name = 2;
+  repeated ModelField fields = 3;
+}
+
+message ActionInfo {
+  string id = 1;
+  string actionId = 2;
+  SecurityLevel securityLevel = 3;
+  AccessLevel accessLevel = 4;
+  string path = 5;
+  string name = 6;
+  RequestMethod requestMethod = 7;
+  string description = 8;
+  string featureId = 9;
+  UserRolesMap userRoles = 10;
+  string operationName = 11;
+  repeated ActionParam requestParams = 12;
+  ActionModel responseModel = 13;
+  ActionModel requestModel = 14;
+  repeated ActionMultipart multipartModels = 15;
+}
+
+message FeatureInfo {
+  string id = 1;
+  string featureId = 2;
+  string path = 3;
+  string name = 4;
+  string description = 5;
+  repeated ActionInfo actions = 6;
+  string moduleName = 7;
+}
+
+message EndpointDetails {
+  string id = 1;
+  string name = 2;
+  string clientId = 3;
+  string clientSecret = 4;
+  repeated FeatureInfo features = 5;
+  repeated ModelDescription models = 6;
+}
+
+message RegisterResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+service EndpointRegistry {
+  rpc RegisterEndpoints (EndpointDetails) returns (RegisterResponse);
+}
