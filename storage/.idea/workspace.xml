@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2c4c19c9-4554-4744-a28a-2ad872427868" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../commons/src/main/java/com/photon/endpoint/dto/mapper/DtoProtoMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../commons/src/main/java/com/photon/endpoint/dto/mapper/DtoProtoMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../console/server-console/node/node" beforeDir="false" afterPath="$PROJECT_DIR$/../console/server-console/node/node" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2nwdfow9OEjYEx5lCxe2i079OZP" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.StorageApplication.executor": "Run",
+    "Maven.storage [clean,install,-DskipTests...].executor": "Run",
+    "Maven.storage [clean,install].executor": "Run",
+    "Maven.storage [clean].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "Spring Boot.StorageApplication.executor": "Run",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/pratheepg/IdeaProjects/storage/src/main/resources/db",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "advanced.settings",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/db" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean install" />
+      <command value="mvn clean" />
+      <command value="mvn clean install -DskipTests compile" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.StorageApplication">
+    <configuration name="StorageApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="openjdk-23" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <envs>
+        <env name="CONFIG_SERVER_URL" value="http://localhost:9196" />
+        <env name="DB_HOST" value="windowshost" />
+        <env name="DB_NAME" value="photon_storage" />
+        <env name="DB_PASSWORD" value="root@1234" />
+        <env name="DB_PORT" value="5432" />
+        <env name="DB_USERNAME" value="root" />
+      </envs>
+      <option name="MAIN_CLASS_NAME" value="com.photon.storage.StorageApplication" />
+      <module name="storage" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.photon.storage.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+        <option name="credential" />
+        <option name="region" />
+        <option name="useCurrentConnection" value="false" />
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StorageApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="storage" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.photon.storage.StorageApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.StorageApplication" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.StorageApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2c4c19c9-4554-4744-a28a-2ad872427868" name="Changes" comment="" />
+      <created>1729888177668</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1729888177668</updated>
+      <workItem from="1729888181107" duration="27507000" />
+      <workItem from="1730800171710" duration="596000" />
+      <workItem from="1731346665697" duration="37439000" />
+      <workItem from="1732360658121" duration="3211000" />
+      <workItem from="1733916324692" duration="11303000" />
+      <workItem from="1735300806006" duration="1453000" />
+      <workItem from="1735465334535" duration="595000" />
+      <workItem from="1736967772023" duration="597000" />
+      <workItem from="1738995381371" duration="4772000" />
+      <workItem from="1741636318833" duration="6707000" />
+      <workItem from="1742796703482" duration="2641000" />
+      <workItem from="1743271028355" duration="597000" />
+      <workItem from="1743424275438" duration="30000" />
+      <workItem from="1743424449268" duration="602000" />
+      <workItem from="1743500167051" duration="6241000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

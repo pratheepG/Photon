@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="48b6db96-bf3a-4424-b4ca-c782485f65a2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/photon/endpoint/dto/mapper/DtoProtoMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/photon/endpoint/dto/mapper/DtoProtoMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../console/server-console/node/node" beforeDir="false" afterPath="$PROJECT_DIR$/../console/server-console/node/node" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="AnnotationType" />
+        <option value="Interface" />
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2YhlPD3vn1VeQwTe6YPEgbJ20sJ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.commons [clean,compile].executor": "Run",
+    "Maven.commons [clean,install,-U].executor": "Run",
+    "Maven.commons [clean,install].executor": "Run",
+    "Maven.commons [clean,package].executor": "Run",
+    "Maven.commons [clean].executor": "Run",
+    "Maven.photon-framework [clean,compile].executor": "Run",
+    "Maven.photon-framework [clean,install].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/pratheepg/IdeaProjects/commons",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/com/photon" />
+      <recent name="$PROJECT_DIR$/src/main/java/com/photon/constants" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.photon.alerts" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.photon.dto" />
+      <recent name="com.photon.bootstrap" />
+      <recent name="com.photon.cache.configuration" />
+      <recent name="com.photon.cache.service" />
+      <recent name="com.photon.properties" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean install -U" />
+      <command value="mvn clean package" />
+      <command value="mvn clean" />
+      <command value="mvn clean install" />
+      <command value="mvn clean compile" />
+    </option>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="48b6db96-bf3a-4424-b4ca-c782485f65a2" name="Changes" comment="" />
+      <created>1700985666723</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1700985666723</updated>
+      <workItem from="1700985667866" duration="6860000" />
+      <workItem from="1701455767318" duration="1390000" />
+      <workItem from="1707596806439" duration="39000" />
+      <workItem from="1707636837033" duration="1060000" />
+      <workItem from="1707638593318" duration="1451000" />
+      <workItem from="1707645676685" duration="3943000" />
+      <workItem from="1708879772917" duration="597000" />
+      <workItem from="1710646687065" duration="4111000" />
+      <workItem from="1712220047813" duration="460000" />
+      <workItem from="1712240824110" duration="16943000" />
+      <workItem from="1712759426643" duration="598000" />
+      <workItem from="1716743773486" duration="56000" />
+      <workItem from="1716744077337" duration="106000" />
+      <workItem from="1716744208738" duration="103000" />
+      <workItem from="1716744346651" duration="138000" />
+      <workItem from="1716744925063" duration="244000" />
+      <workItem from="1716745198375" duration="137000" />
+      <workItem from="1716745964072" duration="1867000" />
+      <workItem from="1716748356667" duration="461000" />
+      <workItem from="1716748832654" duration="1358000" />
+      <workItem from="1718354914824" duration="598000" />
+      <workItem from="1719168992932" duration="597000" />
+      <workItem from="1719653443890" duration="602000" />
+      <workItem from="1721848411254" duration="647000" />
+      <workItem from="1722066277285" duration="570000" />
+      <workItem from="1723281484482" duration="5649000" />
+      <workItem from="1723297232560" duration="669000" />
+      <workItem from="1723298206850" duration="90000" />
+      <workItem from="1723298319846" duration="67000" />
+      <workItem from="1723298445794" duration="3216000" />
+      <workItem from="1723485965349" duration="604000" />
+      <workItem from="1723578083214" duration="2757000" />
+      <workItem from="1723925819839" duration="675000" />
+      <workItem from="1724065821459" duration="597000" />
+      <workItem from="1724080610487" duration="596000" />
+      <workItem from="1724429635136" duration="10760000" />
+      <workItem from="1724610712212" duration="598000" />
+      <workItem from="1724684332379" duration="359000" />
+      <workItem from="1724685580114" duration="352000" />
+      <workItem from="1724753335237" duration="813000" />
+      <workItem from="1724917246725" duration="39228000" />
+      <workItem from="1725352306487" duration="5339000" />
+      <workItem from="1725476772998" duration="28535000" />
+      <workItem from="1725800283609" duration="4077000" />
+      <workItem from="1726319104823" duration="139000" />
+      <workItem from="1726319306440" duration="24494000" />
+      <workItem from="1727374800913" duration="27934000" />
+      <workItem from="1728204261979" duration="5550000" />
+      <workItem from="1728592591916" duration="7684000" />
+      <workItem from="1729191664075" duration="493000" />
+      <workItem from="1729193144381" duration="4322000" />
+      <workItem from="1729623249792" duration="3343000" />
+      <workItem from="1729747832642" duration="301000" />
+      <workItem from="1729748160354" duration="26733000" />
+      <workItem from="1730800168861" duration="27458000" />
+      <workItem from="1731221456321" duration="26350000" />
+      <workItem from="1732360662763" duration="598000" />
+      <workItem from="1733916332774" duration="14034000" />
+      <workItem from="1735300860687" duration="4117000" />
+      <workItem from="1735465336690" duration="29764000" />
+      <workItem from="1736967777655" duration="7573000" />
+      <workItem from="1737653700930" duration="6438000" />
+      <workItem from="1738655675404" duration="16962000" />
+      <workItem from="1740309019499" duration="13049000" />
+      <workItem from="1741624230410" duration="591000" />
+      <workItem from="1741626802304" duration="597000" />
+      <workItem from="1741633550359" duration="4078000" />
+      <workItem from="1742796731176" duration="44189000" />
+      <workItem from="1743270785853" duration="225000" />
+      <workItem from="1743271022617" duration="29400000" />
+      <workItem from="1743424258235" duration="37000" />
+      <workItem from="1743424456238" duration="13499000" />
+      <workItem from="1743491176152" duration="36573000" />
+      <workItem from="1743966510016" duration="15387000" />
+      <workItem from="1744360727133" duration="9609000" />
+      <workItem from="1744529167024" duration="28000" />
+      <workItem from="1744529286984" duration="15000" />
+      <workItem from="1744529414138" duration="57000" />
+      <workItem from="1744529485048" duration="111000" />
+      <workItem from="1744534453570" duration="8000" />
+      <workItem from="1744548892132" duration="518000" />
+      <workItem from="1744549480846" duration="20000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

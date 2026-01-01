@@ -1,0 +1,41 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="JavadocDeclaration" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ADDITIONAL_TAGS" value="note:-,method" />
+    </inspection_tool>
+    <inspection_tool class="VulnerableLibrariesLocal" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="isIgnoringEnabled" value="true" />
+      <option name="ignoredModules">
+        <list>
+          <option value="api-gateway" />
+          <option value="api-gateway" />
+          <option value="api-gateway" />
+          <option value="api-gateway" />
+          <option value="api-gateway" />
+          <option value="api-gateway" />
+        </list>
+      </option>
+      <option name="ignoredPackages">
+        <list>
+          <option value="io.netty:netty-common:4.1.112.Final" />
+          <option value="io.netty:netty-handler:4.1.112.Final" />
+          <option value="org.springframework:spring-webflux:6.1.12" />
+          <option value="net.minidev:json-smart:2.5.1" />
+          <option value="org.xmlunit:xmlunit-core:2.9.1" />
+          <option value="org.apache.tomcat.embed:tomcat-embed-core:10.1.28" />
+        </list>
+      </option>
+      <option name="ignoredReasons">
+        <list>
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

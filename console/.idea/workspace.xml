@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="763437a1-212f-4c90-a557-2ccdb9df4f74" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../commons/src/main/java/com/photon/endpoint/dto/mapper/DtoProtoMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../commons/src/main/java/com/photon/endpoint/dto/mapper/DtoProtoMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-console/node/node" beforeDir="false" afterPath="$PROJECT_DIR$/server-console/node/node" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="com.intellij.jpb.JpaEntity" />
+        <option value="com.intellij.jpb.NewRecord" />
+        <option value="com.intellij.jpb.NewClass" />
+        <option value="com.intellij.jpb.NewInterface" />
+        <option value="Class" />
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
+    <option name="isSearchInLibrariesForStructure" value="false" />
+  </component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2lcL7M1wHhg5hIcns4oJEzovC0v" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.ConsoleApplication.executor": "Run",
+    "DtoCreateDialog.IS_JSON_IGNORE_UNKNOWN_PROPERTIES": "true",
+    "Maven.console [clean,install,-DskipTests].executor": "Run",
+    "Maven.console [clean,install].executor": "Run",
+    "Maven.console [clean].executor": "Run",
+    "Maven.console [compile].executor": "Run",
+    "Maven.console [dependency:purge-local-repository...].executor": "Run",
+    "Maven.console [dependency:tree...].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "OverrideImplement.generate.javadoc": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.ConsoleApplication.executor": "Run",
+    "extract.method.default.visibility": "private",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/pratheepg/IdeaProjects/console",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "advanced.settings",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src/main/resources/batch" />
+      <recent name="$PROJECT_DIR$/src/main/java/com/photon/console/locality/dto" />
+      <recent name="$PROJECT_DIR$/src/main/java/com/photon/console/identity/entity" />
+      <recent name="$PROJECT_DIR$/src/main/java/com/photon/console/cloudconfig" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/sdk-overrides/" />
+      <recent name="$PROJECT_DIR$/src/main/resources/templates" />
+      <recent name="$PROJECT_DIR$/src/main/java/com/photon/console" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.photon.console.identity.configuration" />
+      <recent name="com.photon.console.gateway.dto" />
+      <recent name="com.photon.console.gateway.repository" />
+      <recent name="com.photon.console.gateway.entity" />
+      <recent name="com.photon.console.dto.request" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn compile" />
+      <command value="mvn clean install" />
+      <command value="mvn dependency:purge-local-repository -DreResolve=false" />
+      <command value="mvn dependency:tree -Dincludes=com.github.docker-java" />
+      <command value="mvn clean" />
+      <command value="mvn clean install -DskipTests" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.ConsoleApplication">
+    <configuration name="ConsoleApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <envs>
+        <env name="APP_ID" value="0b61f2f7-aba0-4890-8daf-a7a926e09348" />
+        <env name="APP_SECRET" value="2d1b4ddf-d708-414d-8db5-05687a2da57b" />
+        <env name="CACHE_TYPE" value="REDIS" />
+        <env name="CONFIG_SERVER_URL" value="http://localhost:9196" />
+        <env name="DB_HOST" value="windowshost" />
+        <env name="DB_NAME" value="photon_console" />
+        <env name="DB_PASSWORD" value="root@1234" />
+        <env name="DB_PORT" value="5432" />
+        <env name="DB_USERNAME" value="root" />
+        <env name="GATEWAY_DB_HOST" value="windowshost" />
+        <env name="GATEWAY_DB_NAME" value="photon_gateway" />
+        <env name="GATEWAY_DB_PASSWORD" value="root@1234" />
+        <env name="GATEWAY_DB_PORT" value="5432" />
+        <env name="GATEWAY_DB_USERNAME" value="root" />
+        <env name="IDENTITY_DB_HOST" value="windowshost" />
+        <env name="IDENTITY_DB_NAME" value="photon_identity" />
+        <env name="IDENTITY_DB_PASSWORD" value="root@1234" />
+        <env name="IDENTITY_DB_PORT" value="5432" />
+        <env name="IDENTITY_DB_USERNAME" value="root" />
+        <env name="JWT_EXPIRATION_DATE_IN_MS" value="60000" />
+        <env name="JWT_REFRESH_EXPIRATION_DATE_IN_MS" value="15589800000" />
+        <env name="KAFKA_CONSUMER_GROUP_ID" value="PHOTON-CONSOLE" />
+        <env name="SERVER_API_KEY" value="78e1718f-c9bc-4bc6-baa5-cc13dac8a624" />
+        <env name="SERVER_API_SECRET" value="8893d0f0-0522-4af7-8a5e-62ea0c361c8e" />
+        <env name="SHARED_CONFIG_PATH" value="./config/Shared-Config.properties" />
+        <env name="SPRING_EVENT_BROKER" value="kafka" />
+        <env name="SPRING_KAFKA_BOOTSTRAP_SERVERS" value="windowshost:9092" />
+        <env name="SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET" value="earliest" />
+        <env name="SPRING_REDIS_HOST" value="windowshost" />
+        <env name="SPRING_REDIS_PORT" value="6379" />
+      </envs>
+      <option name="MAIN_CLASS_NAME" value="com.photon.console.ConsoleApplication" />
+      <module name="console" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.photon.console.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+        <option name="credential" />
+        <option name="region" />
+        <option name="useCurrentConnection" value="false" />
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ConsoleApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="console" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.photon.console.ConsoleApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ConsoleApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="console" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.photon.console.ConsoleApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.ConsoleApplication" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.ConsoleApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="763437a1-212f-4c90-a557-2ccdb9df4f74" name="Changes" comment="" />
+      <created>1725474249749</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1725474249749</updated>
+      <workItem from="1725474250892" duration="2016000" />
+      <workItem from="1725476767133" duration="21334000" />
+      <workItem from="1725800276191" duration="18381000" />
+      <workItem from="1726319099823" duration="144000" />
+      <workItem from="1726319301880" duration="49469000" />
+      <workItem from="1727374789375" duration="54818000" />
+      <workItem from="1728204253219" duration="29961000" />
+      <workItem from="1728627916518" duration="46049000" />
+      <workItem from="1729187357971" duration="598000" />
+      <workItem from="1729191596367" duration="559000" />
+      <workItem from="1729193151532" duration="13699000" />
+      <workItem from="1729623255038" duration="596000" />
+      <workItem from="1729747843540" duration="293000" />
+      <workItem from="1729748173799" duration="11429000" />
+      <workItem from="1730800200073" duration="18153000" />
+      <workItem from="1731221400249" duration="26173000" />
+      <workItem from="1732360665332" duration="598000" />
+      <workItem from="1733916334861" duration="5724000" />
+      <workItem from="1735300863224" duration="1203000" />
+      <workItem from="1735465339084" duration="5697000" />
+      <workItem from="1736967781753" duration="598000" />
+      <workItem from="1737572023392" duration="635000" />
+      <workItem from="1738655680084" duration="598000" />
+      <workItem from="1740226284758" duration="1353000" />
+      <workItem from="1741156680613" duration="1943000" />
+      <workItem from="1741624221521" duration="590000" />
+      <workItem from="1741626797348" duration="597000" />
+      <workItem from="1741633543887" duration="25299000" />
+      <workItem from="1742796725006" duration="2068000" />
+      <workItem from="1743271042900" duration="598000" />
+      <workItem from="1743424297711" duration="15000" />
+      <workItem from="1743424391194" duration="10871000" />
+      <workItem from="1743491134683" duration="7827000" />
+      <workItem from="1744374811979" duration="1262000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

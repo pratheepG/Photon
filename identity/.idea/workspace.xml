@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="51bf85ce-6b3a-4963-ae2b-b8f82c085634" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../commons/src/main/java/com/photon/endpoint/dto/mapper/DtoProtoMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../commons/src/main/java/com/photon/endpoint/dto/mapper/DtoProtoMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../console/server-console/node/node" beforeDir="false" afterPath="$PROJECT_DIR$/../console/server-console/node/node" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="com.haulmont.jpb.NewClass" />
+        <option value="com.intellij.jpb.JpaEntity" />
+        <option value="com.intellij.jpb.JpaRepository" />
+        <option value="com.intellij.jpb.NewRecord" />
+        <option value="com.intellij.jpb.NewInterface" />
+        <option value="Dockerfile" />
+        <option value="Record" />
+        <option value="com.intellij.jpb.NewClass" />
+        <option value="AnnotationType" />
+        <option value="Kotlin Class" />
+        <option value="package-info" />
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
+  </component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2XRoPeTNfQpEvzb2sSKAfeXaf3i" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.IdentityApplication.executor": "Run",
+    "Application.Test (1).executor": "Run",
+    "Application.Test.executor": "Run",
+    "DtoCreateDialog.HAS_SETTERS_INITIAL_INITIAL_PROP_KEY": "true",
+    "JUnit.RedisEventTest.executor": "Run",
+    "JUnit.RedisEventTest.testPublishSubscribe.executor": "Run",
+    "Maven.identity [clean,compile].executor": "Run",
+    "Maven.identity [clean,install,-DskipTests].executor": "Run",
+    "Maven.identity [clean,install].executor": "Run",
+    "Maven.identity [clean,package,-DskipTests].executor": "Run",
+    "Maven.identity [clean].executor": "Run",
+    "Maven.identity [dependency:purge-local-repository].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "OverrideImplement.generate.javadoc": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.IdentityApplication.executor": "Run",
+    "SpringAuditingDialog.CreatedDateKey": "true",
+    "SpringAuditingDialog.LastModifiedDateKey": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/pratheepg/IdeaProjects/identity/src/main/resources/db/migration/changelog",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.importing",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
+  }
+}]]></component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/db/migration/changelog" />
+      <recent name="$PROJECT_DIR$/src/main/proto" />
+      <recent name="$PROJECT_DIR$/src/main/java/com/photon/identity/configuration" />
+      <recent name="$PROJECT_DIR$/src/main/resources/db/migration" />
+      <recent name="$PROJECT_DIR$/src/main/java/com/photon/identity/initial_load_process" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/db" />
+      <recent name="$PROJECT_DIR$/src/main/resources/db.changelog" />
+      <recent name="$PROJECT_DIR$/src/main/proto/subscriber" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.photon.identity.authentication.dto.request" />
+      <recent name="com.photon.identity.authentication.dto.response" />
+      <recent name="com.photon.identity.enums" />
+      <recent name="com.photon.identity.dto.request" />
+      <recent name="com.photon.identity.dto.response" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean install" />
+      <command value="mvn dependency:purge-local-repository" />
+      <command value="mvn clean" />
+      <command value="mvn clean compile" />
+      <command value="mvn clean package -DskipTests" />
+      <command value="mvn clean install -DskipTests" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.IdentityApplication">
+    <configuration name="IdentityApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <envs>
+        <env name="CACHE_TYPE" value="REDIS" />
+        <env name="CONFIG_SERVER_URL" value="http://localhost:9196" />
+        <env name="DB_HOST" value="windowshost" />
+        <env name="DB_NAME" value="photon_identity" />
+        <env name="DB_PASSWORD" value="root@1234" />
+        <env name="DB_PORT" value="5432" />
+        <env name="DB_USERNAME" value="root" />
+        <env name="JWT_EXPIRATION_DATE_IN_MS" value="60000" />
+        <env name="JWT_REFRESH_EXPIRATION_DATE_IN_MS" value="15589800000" />
+      </envs>
+      <option name="MAIN_CLASS_NAME" value="com.photon.identity.IdentityApplication" />
+      <module name="identity" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.photon.identity.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+        <option name="credential" />
+        <option name="region" />
+        <option name="useCurrentConnection" value="false" />
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RedisEventTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="identity" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.photon.identity.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.photon.identity" />
+      <option name="MAIN_CLASS_NAME" value="com.photon.identity.RedisEventTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RedisEventTest.testPublishSubscribe" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="identity" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.photon.identity.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.photon.identity" />
+      <option name="MAIN_CLASS_NAME" value="com.photon.identity.RedisEventTest" />
+      <option name="METHOD_NAME" value="testPublishSubscribe" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IdentityApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="identity" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.photon.identity.IdentityApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IdentityApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="identity" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.photon.identity.IdentityApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.IdentityApplication" />
+      <item itemvalue="JUnit.RedisEventTest" />
+      <item itemvalue="JUnit.RedisEventTest.testPublishSubscribe" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.IdentityApplication" />
+        <item itemvalue="JUnit.RedisEventTest" />
+        <item itemvalue="JUnit.RedisEventTest.testPublishSubscribe" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="51bf85ce-6b3a-4963-ae2b-b8f82c085634" name="Changes" comment="" />
+      <created>1698601230987</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1698601230987</updated>
+      <workItem from="1698601232329" duration="6205000" />
+      <workItem from="1699035032177" duration="19304000" />
+      <workItem from="1699688839444" duration="13590000" />
+      <workItem from="1699790363842" duration="27670000" />
+      <workItem from="1700317428810" duration="2788000" />
+      <workItem from="1700846403519" duration="11712000" />
+      <workItem from="1701455791187" duration="757000" />
+      <workItem from="1707596809967" duration="36000" />
+      <workItem from="1707636844715" duration="945000" />
+      <workItem from="1707638603287" duration="1153000" />
+      <workItem from="1707645658961" duration="1866000" />
+      <workItem from="1708879762596" duration="597000" />
+      <workItem from="1710646677041" duration="3909000" />
+      <workItem from="1712220036241" duration="459000" />
+      <workItem from="1712240815707" duration="3568000" />
+      <workItem from="1712759416215" duration="598000" />
+      <workItem from="1716743780359" duration="49000" />
+      <workItem from="1716744083484" duration="100000" />
+      <workItem from="1716744214523" duration="97000" />
+      <workItem from="1716744352371" duration="133000" />
+      <workItem from="1716744931674" duration="238000" />
+      <workItem from="1716745203654" duration="132000" />
+      <workItem from="1716745968143" duration="1863000" />
+      <workItem from="1716748361996" duration="455000" />
+      <workItem from="1716748826687" duration="587000" />
+      <workItem from="1718354910888" duration="1556000" />
+      <workItem from="1719168988078" duration="597000" />
+      <workItem from="1719653438817" duration="3924000" />
+      <workItem from="1721848416577" duration="3878000" />
+      <workItem from="1722066270490" duration="3469000" />
+      <workItem from="1723281260417" duration="20000" />
+      <workItem from="1723281358114" duration="51000" />
+      <workItem from="1723281414953" duration="50000" />
+      <workItem from="1723281477050" duration="8245000" />
+      <workItem from="1723297243022" duration="658000" />
+      <workItem from="1723298212780" duration="85000" />
+      <workItem from="1723298327287" duration="59000" />
+      <workItem from="1723298453577" duration="33219000" />
+      <workItem from="1723485973640" duration="20000000" />
+      <workItem from="1723578068561" duration="35271000" />
+      <workItem from="1723797945236" duration="10642000" />
+      <workItem from="1723811400072" duration="40693000" />
+      <workItem from="1723923994803" duration="11907000" />
+      <workItem from="1724065816458" duration="622000" />
+      <workItem from="1724080615001" duration="4721000" />
+      <workItem from="1724429627828" duration="41856000" />
+      <workItem from="1724610716951" duration="1896000" />
+      <workItem from="1724684336011" duration="673000" />
+      <workItem from="1724685583236" duration="349000" />
+      <workItem from="1724686435110" duration="1827000" />
+      <workItem from="1724917258394" duration="20207000" />
+      <workItem from="1725352298800" duration="50635000" />
+      <workItem from="1725476788761" duration="5904000" />
+      <workItem from="1725800300512" duration="5152000" />
+      <workItem from="1726319110802" duration="133000" />
+      <workItem from="1726319312264" duration="11185000" />
+      <workItem from="1727374810786" duration="84535000" />
+      <workItem from="1728204235525" duration="35156000" />
+      <workItem from="1728632640449" duration="31346000" />
+      <workItem from="1729187355634" duration="1217000" />
+      <workItem from="1729191592247" duration="563000" />
+      <workItem from="1729193148208" duration="1821000" />
+      <workItem from="1729623253150" duration="597000" />
+      <workItem from="1729747836905" duration="298000" />
+      <workItem from="1729748169522" duration="12810000" />
+      <workItem from="1730800196649" duration="2769000" />
+      <workItem from="1731221363254" duration="6174000" />
+      <workItem from="1732360668769" duration="598000" />
+      <workItem from="1733916338436" duration="51396000" />
+      <workItem from="1735299059625" duration="646000" />
+      <workItem from="1735300071901" duration="216000" />
+      <workItem from="1735300310253" duration="318000" />
+      <workItem from="1735300637100" duration="125000" />
+      <workItem from="1735300770580" duration="34833000" />
+      <workItem from="1735465342392" duration="61648000" />
+      <workItem from="1736967751102" duration="59844000" />
+      <workItem from="1737572060480" duration="59345000" />
+      <workItem from="1738655095850" duration="67000" />
+      <workItem from="1738655183700" duration="100000" />
+      <workItem from="1738655596320" duration="176484000" />
+      <workItem from="1740221686980" duration="138976000" />
+      <workItem from="1741156787660" duration="39053000" />
+      <workItem from="1741600258456" duration="737000" />
+      <workItem from="1741606591693" duration="1447000" />
+      <workItem from="1741609096643" duration="75000" />
+      <workItem from="1741609186924" duration="37000" />
+      <workItem from="1741624187918" duration="1118000" />
+      <workItem from="1741626795050" duration="598000" />
+      <workItem from="1741633542420" duration="51673000" />
+      <workItem from="1742796719122" duration="3971000" />
+      <workItem from="1743271040213" duration="597000" />
+      <workItem from="1743424292398" duration="18000" />
+      <workItem from="1743424380202" duration="11876000" />
+      <workItem from="1743491206619" duration="29202000" />
+      <workItem from="1744366452149" duration="2429000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

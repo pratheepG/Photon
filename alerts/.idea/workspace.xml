@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="fabe4fd8-5f4c-4730-a912-6a136f2dd634" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../commons/src/main/java/com/photon/endpoint/dto/mapper/DtoProtoMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../commons/src/main/java/com/photon/endpoint/dto/mapper/DtoProtoMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../console/server-console/node/node" beforeDir="false" afterPath="$PROJECT_DIR$/../console/server-console/node/node" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="showPreview" value="true" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2nnzabJluoNgT98lHbA8bnMpRIz" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.AlertsApplication.executor": "Run",
+    "Maven.alerts [clean,compile].executor": "Run",
+    "Maven.alerts [clean,install,-DskipTests...].executor": "Run",
+    "Maven.alerts [clean,install].executor": "Run",
+    "Maven.alerts [clean].executor": "Run",
+    "Maven.alerts [compile,-X].executor": "Run",
+    "Maven.alerts [compile].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.AlertsApplication.executor": "Run",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_directory_selection": "/Users/pratheepg/IdeaProjects/alerts/src/main/java/com/photon/alerts",
+    "last_opened_file_path": "/Users/pratheepg/IdeaProjects/alerts",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.LRUPopupBuilder$1/SQL Dialect": [
+      "PostgreSQL"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/db/migration" />
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+      <recent name="$PROJECT_DIR$/src/main/java/com/photon/alerts" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/db/changelog" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.photon.alerts.dto" />
+      <recent name="com.photon.alerts.entity" />
+      <recent name="com.photon.alerts.configuration" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn compile" />
+      <command value="mvn compile -X" />
+      <command value="mvn clean" />
+      <command value="mvn clean install" />
+      <command value="mvn clean compile" />
+      <command value="mvn clean install -DskipTests compile" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.AlertsApplication">
+    <configuration name="AlertsApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <envs>
+        <env name="CONFIG_SERVER_URL" value="http://localhost:9196" />
+        <env name="DB_HOST" value="windowshost" />
+        <env name="DB_NAME" value="photon_alert" />
+        <env name="DB_PASSWORD" value="root@1234" />
+        <env name="DB_PORT" value="5432" />
+        <env name="DB_USERNAME" value="root" />
+      </envs>
+      <option name="MAIN_CLASS_NAME" value="com.photon.alerts.AlertsApplication" />
+      <module name="alerts" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.photon.alerts.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AlertsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="alerts" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.photon.alerts.AlertsApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.AlertsApplication" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.AlertsApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fabe4fd8-5f4c-4730-a912-6a136f2dd634" name="Changes" comment="" />
+      <created>1729623691393</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1729623691393</updated>
+      <workItem from="1729623693491" duration="2408000" />
+      <workItem from="1729747827984" duration="307000" />
+      <workItem from="1729748148736" duration="597000" />
+      <workItem from="1730800188584" duration="596000" />
+      <workItem from="1735587945264" duration="20278000" />
+      <workItem from="1736967764414" duration="595000" />
+      <workItem from="1740923263334" duration="1298000" />
+      <workItem from="1741624226697" duration="590000" />
+      <workItem from="1741626800070" duration="598000" />
+      <workItem from="1741633547182" duration="15000000" />
+      <workItem from="1742796696599" duration="9312000" />
+      <workItem from="1743271047409" duration="598000" />
+      <workItem from="1743424271117" duration="31000" />
+      <workItem from="1743424347580" duration="617000" />
+      <workItem from="1743673033775" duration="29742000" />
+      <workItem from="1743876817430" duration="1728000" />
+      <workItem from="1743881123999" duration="3293000" />
+      <workItem from="1743925597747" duration="55975000" />
+      <workItem from="1744360721625" duration="35525000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/photon/alerts/provider/AlertDispatcher.java</url>
+          <line>209</line>
+          <option name="timeStamp" value="126" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/alerts$AlertsApplication.ic" NAME="AlertsApplication Coverage Results" MODIFIED="1763015403345" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.photon.alerts.*</FILTER>
+    </SUITE>
+  </component>
+</project>

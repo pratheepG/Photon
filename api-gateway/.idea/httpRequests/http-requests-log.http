@@ -1,0 +1,10 @@
+GET http://127.0.0.1:8085/actuator/health
+Accept: application/vnd.spring-boot.actuator.v3+json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+content-length: 0
+
+<> 2024-08-12T234114.200.json
+
+###
+
