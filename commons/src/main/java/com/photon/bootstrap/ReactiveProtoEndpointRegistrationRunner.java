@@ -9,6 +9,7 @@ import com.photon.properties.ApplicationConfigProperties;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import lombok.extern.slf4j.Slf4j;
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -25,6 +26,9 @@ public class ReactiveProtoEndpointRegistrationRunner implements ApplicationRunne
 
     private final ReactiveEndpointScannerService endpointScannerService;
     private final ApplicationConfigProperties applicationConfigProperties;
+
+    @GrpcClient("console")
+    private EndpointRegistryGrpc.EndpointRegistryBlockingStub blockingStub;
 
     public ReactiveProtoEndpointRegistrationRunner(ReactiveEndpointScannerService endpointScannerService,
                                                    ApplicationConfigProperties applicationConfigProperties) {
@@ -43,13 +47,13 @@ public class ReactiveProtoEndpointRegistrationRunner implements ApplicationRunne
             return;
         }
 
-        ManagedChannel channel = ManagedChannelBuilder
-                .forAddress(host, port)
-                .usePlaintext()
-                .build();
+//        ManagedChannel channel = ManagedChannelBuilder
+//                .forAddress(host, port)
+//                .usePlaintext()
+//                .build();
 
-        EndpointRegistryGrpc.EndpointRegistryBlockingStub blockingStub =
-                EndpointRegistryGrpc.newBlockingStub(channel);
+//        EndpointRegistryGrpc.EndpointRegistryBlockingStub blockingStub =
+//                EndpointRegistryGrpc.newBlockingStub(channel);
 
         endpointScannerService.scanEndpoints()
                 .map(response -> {
@@ -75,7 +79,7 @@ public class ReactiveProtoEndpointRegistrationRunner implements ApplicationRunne
                 .doOnError(e -> log.error("Error while registering endpoints via gRPC", e))
                 .doFinally(signal -> {
                     log.info("Shutting down gRPC channel, signal={}", signal);
-                    channel.shutdownNow();
+                    //channel.shutdownNow();
                 })
                 .subscribe();
     }

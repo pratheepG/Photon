@@ -18,6 +18,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spring-cloud.version>2023.0.3</spring-cloud.version>
+    <grpc.version>1.64.0</grpc.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -121,6 +122,11 @@
       <artifactId>spring-boot-starter-amqp</artifactId>
       <optional>true</optional>
     </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.springframework.cloud</groupId>-->
+<!--      <artifactId>spring-cloud-starter-loadbalancer</artifactId>-->
+<!--      <optional>true</optional>-->
+<!--    </dependency>-->
 
 
     <!--      Reactive       -->
@@ -166,15 +172,14 @@
       <version>3.1.0.RELEASE</version>
     </dependency>
     <dependency>
+      <groupId>net.devh</groupId>
+      <artifactId>grpc-client-spring-boot-starter</artifactId>
+      <version>2.14.0.RELEASE</version> <!-- Use the appropriate version -->
+    </dependency>
+    <dependency>
       <groupId>io.grpc</groupId>
       <artifactId>grpc-netty-shaded</artifactId>
-      <version>1.70.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>io.grpc</groupId>
-          <artifactId>grpc-core</artifactId>
-        </exclusion>
-      </exclusions>
+      <version>${grpc.version}</version>
     </dependency>
     <!-- #################### -->
 

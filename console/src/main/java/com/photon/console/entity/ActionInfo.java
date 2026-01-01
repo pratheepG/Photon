@@ -1,6 +1,12 @@
 package com.photon.console.entity;
 
+import com.photon.console.entity.converter.ActionModelConverter;
+import com.photon.console.entity.converter.ActionMultipartConverter;
+import com.photon.console.entity.converter.ActionParamConverter;
 import com.photon.console.entity.converter.MapToJsonConverter;
+import com.photon.endpoint.dto.ActionModelDto;
+import com.photon.endpoint.dto.ActionMultipartDto;
+import com.photon.endpoint.dto.ActionParamDto;
 import com.photon.endpoint.enums.AccessLevel;
 import com.photon.enums.SecurityLevel;
 import jakarta.persistence.*;
@@ -51,14 +57,9 @@ public class ActionInfo {
     @Column(name = "user_roles", columnDefinition = "TEXT")
     private Map<String,Map<Long, String>> userRoles = new HashMap<>();
 
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "f_id")
-//    private FeatureInfo feature;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "f_id", nullable = false)
     private FeatureInfo feature;
-
 
     @Column(name = "feature_id", nullable = false)
     private String featureId;
@@ -66,17 +67,21 @@ public class ActionInfo {
     @Column(name = "operation_name")
     private String operationName;
 
-    @Column(name = "request_body_model_id")
-    private String requestBodyModelId;
+    @Convert(converter = ActionParamConverter.class)
+    @Column(name = "request_params", columnDefinition = "TEXT")
+    private Set<ActionParamDto> requestParams = new HashSet<>();
 
-    @Column(name = "is_request_body_collection")
-    private Boolean isRequestBodyCollection;
+    @Convert(converter = ActionModelConverter.class)
+    @Column(name = "response_model", columnDefinition = "TEXT")
+    private ActionModelDto responseModel;
 
-    @Column(name = "response_body_model_id")
-    private String responseBodyModelId;
+    @Convert(converter = ActionModelConverter.class)
+    @Column(name = "request_model", columnDefinition = "TEXT")
+    private ActionModelDto requestModel;
 
-    @Column(name = "is_response_body_collection")
-    private Boolean isResponseBodyCollection;
+    @Convert(converter = ActionMultipartConverter.class)
+    @Column(name = "request_multipart", columnDefinition = "TEXT")
+    private Set<ActionMultipartDto> requestMultipart = new HashSet<>();
 
     @Override
     public final boolean equals(Object o) {

@@ -125,10 +125,10 @@ public class SdkGenerator {
                     ad.httpMethod = a.getRequestMethod() == null ? "GET" : a.getRequestMethod().name();
                     ad.path = joinPaths(f.getPath(), a.getPath());
                     ad.description = a.getDescription();
-                    ad.requestModelId = a.getRequestBodyModelId();
-                    ad.requestCollection = Boolean.TRUE.equals(a.getIsRequestBodyCollection());
-                    ad.responseModelId = a.getResponseBodyModelId();
-                    ad.responseCollection = Boolean.TRUE.equals(a.getIsResponseBodyCollection());
+                    ad.requestModelId = a.getRequestModel().getModelId();
+                    ad.requestCollection = a.getRequestModel().isCollection();
+                    ad.responseModelId = a.getResponseModel().getModelId();
+                    ad.responseCollection = a.getResponseModel().isCollection();
 
                     // if referenced models missing, create placeholder model defs
                     if (ad.requestModelId != null && !ast.modelsById.containsKey(ad.requestModelId)) {

@@ -21,10 +21,10 @@ public class ActionInfoMapper {
                 .requestMethod(actionInfo.getRequestMethod())
                 .description(actionInfo.getDescription())
                 .userRoles(actionInfo.getUserRoles())
-                .isRequestBodyCollection(actionInfo.getIsRequestBodyCollection())
-                .isResponseBodyCollection(actionInfo.getIsResponseBodyCollection())
-                .requestBodyModelId(actionInfo.getRequestBodyModelId())
-                .responseBodyModelId(actionInfo.getResponseBodyModelId())
+                .requestMultipart(actionInfo.getRequestMultipart())
+                .requestModel(actionInfo.getRequestModel())
+                .requestParams(actionInfo.getRequestParams())
+                .responseModel(actionInfo.getResponseModel())
                 .operationName(actionInfo.getOperationName())
                 .build();
     }
@@ -45,10 +45,10 @@ public class ActionInfoMapper {
                 .description(actionInfoDto.getDescription())
                 .featureId(actionInfoDto.getFeatureId())
                 .userRoles(actionInfoDto.getUserRoles())
-                .isResponseBodyCollection(actionInfoDto.isResponseBodyCollection())
-                .responseBodyModelId(actionInfoDto.getResponseBodyModelId())
-                .isRequestBodyCollection(actionInfoDto.isRequestBodyCollection())
-                .requestBodyModelId(actionInfoDto.getRequestBodyModelId())
+                .requestMultipart(actionInfoDto.getRequestMultipart())
+                .requestModel(actionInfoDto.getRequestModel())
+                .requestParams(actionInfoDto.getRequestParams())
+                .responseModel(actionInfoDto.getResponseModel())
                 .operationName(actionInfoDto.getOperationName())
                 .build();
     }

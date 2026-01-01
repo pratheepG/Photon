@@ -3,25 +3,20 @@ package com.photon.endpoint.service;
 import com.photon.dto.ApiResponseDto;
 import com.photon.endpoint.annotation.ActionInfo;
 import com.photon.endpoint.annotation.FeatureInfo;
-import com.photon.endpoint.dto.ActionInfoDto;
-import com.photon.endpoint.dto.EndpointDetailsDto;
-import com.photon.endpoint.dto.FeatureInfoDto;
-import com.photon.endpoint.dto.ModelDescriptionDto;
+import com.photon.endpoint.dto.*;
 import com.photon.endpoint.enums.AccessLevel;
+import com.photon.endpoint.enums.BaseType;
 import com.photon.endpoint.utils.ModelIntrospector;
 import com.photon.endpoint.utils.ResponseModelTypeResolver;
 import com.photon.enums.ExceptionEnum;
 import com.photon.exception.ApplicationException;
 import com.photon.properties.ApplicationConfigProperties;
-import com.photon.utils.PhotonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.reactive.result.method.RequestMappingInfo;
 import org.springframework.web.reactive.result.method.annotation.RequestMappingHandlerMapping;
@@ -64,72 +59,122 @@ public class ReactiveEndpointScannerService {
                             .collect(Collectors.toSet());
 
                     EndpointDetailsDto endpointDetails = new EndpointDetailsDto();
-                    Set<FeatureInfoDto> features = new HashSet<>();
+                    Set<FeatureInfoDto> features = new LinkedHashSet<>();
                     Set<Class<?>> seenDtoClasses = new HashSet<>();
-                    Set<ModelDescriptionDto> dtoDescriptions = new HashSet<>();
+                    Set<ModelDescriptionDto> dtoDescriptions = new LinkedHashSet<>();
 
                     for (Class<?> clazz : annotatedClasses) {
-                        FeatureInfo featureInfo = PhotonUtils.requireNonNull(clazz.getAnnotation(FeatureInfo.class));
-                        String basePath = "";
 
+                        FeatureInfo featureInfo = clazz.getAnnotation(FeatureInfo.class);
+                        if (featureInfo == null) continue;
+
+                        String basePath = "";
                         if (clazz.isAnnotationPresent(RequestMapping.class)) {
-                            RequestMapping classMapping = PhotonUtils.requireNonNull(clazz.getAnnotation(RequestMapping.class));
-                            if (classMapping.value().length > 0) {
-                                basePath = classMapping.value()[0];
+                            RequestMapping rm = clazz.getAnnotation(RequestMapping.class);
+                            if (rm.value().length > 0) {
+                                basePath = rm.value()[0];
                             }
                         }
 
-                        Set<ActionInfoDto> actions = new HashSet<>();
+                        Set<ActionInfoDto> actions = new LinkedHashSet<>();
 
-                        for (Method method : clazz.getDeclaredMethods()) {
+                        for (Method method : clazz.getMethods()) {
+
                             if (!method.isAnnotationPresent(ActionInfo.class)) continue;
+                            ActionInfo actionInfo = method.getAnnotation(ActionInfo.class);
 
-                            ActionInfo actionInfo = PhotonUtils.requireNonNull(method.getAnnotation(ActionInfo.class));
-
-                            // -- Request Body
-                            String requestBodyModelId = null;
-                            boolean isRequestBodyCollection = false;
+                            // ---------- Request Body ----------
+                            ActionModelDto requestBody = null;
                             for (Parameter parameter : method.getParameters()) {
                                 if (parameter.isAnnotationPresent(RequestBody.class)) {
+                                    requestBody = new ActionModelDto();
                                     Type paramType = parameter.getParameterizedType();
-                                    ResponseModelTypeResolver.Result reqResult = ResponseModelTypeResolver.resolve(paramType);
+                                    ResponseModelTypeResolver.Result reqResult =
+                                            ResponseModelTypeResolver.resolve(paramType);
+
                                     Class<?> reqDto = reqResult.getModelClass();
                                     if (reqDto != null) {
-                                        requestBodyModelId = reqDto.getCanonicalName();
-                                        isRequestBodyCollection = reqResult.isCollection();
+                                        requestBody.setKey(parameter.getName());
+                                        requestBody.setModelId(reqDto.getCanonicalName());
+                                        requestBody.setCollection(reqResult.isCollection());
+
                                         if (seenDtoClasses.add(reqDto)) {
-                                            dtoDescriptions.addAll(ModelIntrospector.buildDtoGraph(reqDto));
+                                            dtoDescriptions.addAll(
+                                                    ModelIntrospector.buildDtoGraph(reqDto)
+                                            );
                                         }
                                     }
+                                    break;
                                 }
                             }
 
-                            // -- Response Body
-                            ResponseModelTypeResolver.Result resResult = ResponseModelTypeResolver.resolve(method.getGenericReturnType());
-                            String responseBodyModelId = null;
-                            boolean isResponseBodyCollection = false;
+                            // ---------- Request Params ----------
+                            Set<ActionParamDto> requestParams = new LinkedHashSet<>();
+                            for (Parameter parameter : method.getParameters()) {
+                                if (parameter.isAnnotationPresent(RequestParam.class)) {
+                                    RequestParam rp = parameter.getAnnotation(RequestParam.class);
+
+                                    ActionParamDto param = new ActionParamDto();
+                                    param.setKey(resolveRequestParamKey(parameter));
+                                    param.setType(resolveBaseType(parameter));
+                                    param.setCollection(Collection.class.isAssignableFrom(parameter.getType()));
+                                    param.setRequired(rp.required());
+
+                                    requestParams.add(param);
+                                }
+                            }
+
+                            // ---------- Multipart ----------
+                            Set<ActionMultipartDto> multipart = new LinkedHashSet<>();
+                            for (Parameter parameter : method.getParameters()) {
+                                if (parameter.isAnnotationPresent(RequestPart.class)) {
+                                    ResponseModelTypeResolver.Result reqResult =
+                                            ResponseModelTypeResolver.resolve(parameter.getParameterizedType());
+
+                                    ActionMultipartDto mp = new ActionMultipartDto();
+                                    mp.setKey(parameter.getName());
+                                    mp.setCollection(reqResult.isCollection());
+
+                                    multipart.add(mp);
+                                }
+                            }
+
+                            // ---------- Response Body ----------
+                            ActionModelDto responseBody = null;
+                            ResponseModelTypeResolver.Result resResult =
+                                    ResponseModelTypeResolver.resolve(method.getGenericReturnType());
+
                             if (resResult.getModelClass() != null) {
-                                responseBodyModelId = resResult.getModelClass().getCanonicalName();
-                                isResponseBodyCollection = resResult.isCollection();
+                                responseBody = new ActionModelDto();
+                                responseBody.setModelId(resResult.getModelClass().getCanonicalName());
+                                responseBody.setCollection(resResult.isCollection());
+
                                 if (seenDtoClasses.add(resResult.getModelClass())) {
-                                    dtoDescriptions.addAll(ModelIntrospector.buildDtoGraph(resResult.getModelClass()));
-                                }
-                                if (resResult.getCollectionDepth() > 1) {
-                                    log.warn("Nested collection depth in return type of method '{}'", method.getName());
+                                    dtoDescriptions.addAll(
+                                            ModelIntrospector.buildDtoGraph(resResult.getModelClass())
+                                    );
                                 }
                             }
 
+                            // ---------- Mapping ----------
                             for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : mappings.entrySet()) {
-                                HandlerMethod handler = entry.getValue();
-                                if (!handler.getMethod().equals(method)) continue;
 
-                                RequestMappingInfo mappingInfo = entry.getKey();
-                                String fullPath = PhotonUtils.requireNonNull(mappingInfo.getPatternsCondition()).getPatterns().stream()
+                                if (!entry.getValue().getMethod().equals(method)) continue;
+
+                                RequestMappingInfo info = entry.getKey();
+
+                                String fullPath = info.getPatternsCondition()
+                                        .getPatterns()
+                                        .stream()
                                         .map(PathPattern::getPatternString)
                                         .findFirst()
                                         .orElse(basePath);
-                                RequestMethod httpMethod = mappingInfo.getMethodsCondition().getMethods().stream()
-                                        .findFirst().orElse(RequestMethod.GET);
+
+                                RequestMethod httpMethod = info.getMethodsCondition()
+                                        .getMethods()
+                                        .stream()
+                                        .findFirst()
+                                        .orElse(RequestMethod.GET);
 
                                 actions.add(ActionInfoDto.builder()
                                         .actionId(actionInfo.id())
@@ -138,23 +183,25 @@ public class ReactiveEndpointScannerService {
                                         .featureId(featureInfo.id())
                                         .path(fullPath)
                                         .requestMethod(httpMethod)
-                                        .accessLevel((featureInfo.accessLevel().equals(AccessLevel.NONE))?actionInfo.accessLevel():featureInfo.accessLevel())
+                                        .accessLevel(
+                                                featureInfo.accessLevel().equals(AccessLevel.NONE)
+                                                        ? actionInfo.accessLevel()
+                                                        : featureInfo.accessLevel()
+                                        )
                                         .securityLevel(actionInfo.securityLevel())
-                                        .requestBodyModelId(requestBodyModelId)
-                                        .isRequestBodyCollection(isRequestBodyCollection)
-                                        .responseBodyModelId(responseBodyModelId)
-                                        .isResponseBodyCollection(isResponseBodyCollection)
+                                        .requestModel(requestBody)
+                                        .requestParams(requestParams)
+                                        .requestMultipart(multipart)
+                                        .responseModel(responseBody)
                                         .operationName(method.getName())
                                         .build());
                             }
                         }
 
-                        String moduleName = clazz.getSimpleName().replaceFirst("Controller$", "");
-
                         features.add(FeatureInfoDto.builder()
                                 .featureId(featureInfo.id())
                                 .name(featureInfo.name())
-                                .moduleName(moduleName)
+                                .moduleName(clazz.getSimpleName())
                                 .path(basePath)
                                 .description(featureInfo.description())
                                 .actions(actions)
@@ -164,7 +211,7 @@ public class ReactiveEndpointScannerService {
                     endpointDetails.setId(applicationConfigProperties.getApplicationName());
                     endpointDetails.setName(applicationConfigProperties.getApplicationName());
                     endpointDetails.setClientId(applicationConfigProperties.getXApiKey());
-                    endpointDetails.setClientSecret(applicationConfigProperties.getXApiKey());
+                    endpointDetails.setClientSecret(applicationConfigProperties.getXApiSecret());
                     endpointDetails.setFeatures(features);
                     endpointDetails.setModels(dtoDescriptions);
 
@@ -176,7 +223,46 @@ public class ReactiveEndpointScannerService {
 
                 })
                 .subscribeOn(Schedulers.boundedElastic())
-                .doOnError(e -> log.error("❌ Error scanning reactive endpoints: {}", e.getMessage(), e))
-                .onErrorMap(e -> new ApplicationException(ExceptionEnum.ERR_1009.getErrorResponseBody(e.getMessage()), HttpStatus.OK));
+                .onErrorMap(e ->
+                        new ApplicationException(
+                                ExceptionEnum.ERR_1009.getErrorResponseBody(e.getMessage()),
+                                HttpStatus.OK
+                        )
+                );
+    }
+
+    // ---------- Helpers (same as servlet) ----------
+
+    private BaseType resolveBaseType(Parameter parameter) {
+        Class<?> type = parameter.getType();
+
+        if (Collection.class.isAssignableFrom(type)) {
+            return Set.class.isAssignableFrom(type) ? BaseType.SET : BaseType.LIST;
+        }
+        if (Map.class.isAssignableFrom(type)) return BaseType.MAP;
+        if (type == String.class) return BaseType.STRING;
+        if (type == int.class || type == Integer.class) return BaseType.INTEGER;
+        if (type == long.class || type == Long.class) return BaseType.LONG;
+        if (type == boolean.class || type == Boolean.class) return BaseType.BOOLEAN;
+        if (type == float.class || type == Float.class) return BaseType.FLOAT;
+        if (type == double.class || type == Double.class) return BaseType.DOUBLE;
+
+        if (Date.class.isAssignableFrom(type) || type.getName().startsWith("java.time")) {
+            return BaseType.DATE;
+        }
+
+        if (!type.isPrimitive() && !type.getName().startsWith("java.")) {
+            return BaseType.OBJECT;
+        }
+
+        return BaseType.UNKNOWN;
+    }
+
+    private String resolveRequestParamKey(Parameter parameter) {
+        RequestParam rp = parameter.getAnnotation(RequestParam.class);
+        if (rp == null) return parameter.getName();
+        if (!rp.name().isEmpty()) return rp.name();
+        if (!rp.value().isEmpty()) return rp.value();
+        return parameter.getName();
     }
 }

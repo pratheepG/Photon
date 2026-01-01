@@ -3,11 +3,9 @@ package com.photon.endpoint.service;
 import com.photon.dto.ApiResponseDto;
 import com.photon.endpoint.annotation.ActionInfo;
 import com.photon.endpoint.annotation.FeatureInfo;
-import com.photon.endpoint.dto.ActionInfoDto;
-import com.photon.endpoint.dto.EndpointDetailsDto;
-import com.photon.endpoint.dto.FeatureInfoDto;
-import com.photon.endpoint.dto.ModelDescriptionDto;
+import com.photon.endpoint.dto.*;
 import com.photon.endpoint.enums.AccessLevel;
+import com.photon.endpoint.enums.BaseType;
 import com.photon.endpoint.utils.ModelIntrospector;
 import com.photon.endpoint.utils.ResponseModelTypeResolver;
 import com.photon.enums.ExceptionEnum;
@@ -19,9 +17,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -97,29 +93,67 @@ public class EndpointScannerService {
                                 continue;
                             }
 
-                            String requestBodyModelId = null;
-                            boolean isRequestBodyCollection = false;
+                            //-- Request body
+                            ActionModelDto requestBody = null;
                             for (Parameter parameter : method.getParameters()) {
                                 if (parameter.isAnnotationPresent(RequestBody.class)) {
+                                    requestBody = new ActionModelDto();
                                     Type paramType = parameter.getParameterizedType();
                                     ResponseModelTypeResolver.Result reqResult = ResponseModelTypeResolver.resolve(paramType);
                                     Class<?> reqDto = reqResult.getModelClass();
                                     if (reqDto != null) {
-                                        requestBodyModelId = reqDto.getCanonicalName();
-                                        isRequestBodyCollection = reqResult.isCollection();
+                                        requestBody.setModelId(reqDto.getCanonicalName());
+                                        requestBody.setKey(parameter.getName());
+                                        requestBody.setCollection(reqResult.isCollection());
                                         if (seenDtoClasses.add(reqDto)) {
                                             dtoDescriptions.addAll(ModelIntrospector.buildDtoGraph(reqDto));
                                         }
                                     }
+                                    break;
                                 }
                             }
 
+                            //-- Request param
+                            Set<ActionParamDto> requestParams = new HashSet<>();
+                            for (Parameter parameter : method.getParameters()) {
+                                if (parameter.isAnnotationPresent(RequestParam.class)) {
+                                    RequestParam rp = parameter.getAnnotation(RequestParam.class);
+                                    Type paramType = parameter.getParameterizedType();
+                                    ResponseModelTypeResolver.Result reqResult = ResponseModelTypeResolver.resolve(paramType);
+                                    Class<?> reqDto = reqResult.getModelClass();
+                                    if (reqDto != null) {
+                                        ActionParamDto  requestParam = new ActionParamDto();
+                                        requestParam.setType(resolveBaseType(parameter));
+                                        requestParam.setKey(resolveRequestParamKey(parameter));
+                                        requestParam.setCollection(reqResult.isCollection());
+                                        requestParam.setRequired(rp.required());
+                                        requestParams.add(requestParam);
+                                    }
+                                }
+                            }
+
+                            //-- Multipart request
+                            Set<ActionMultipartDto> requestMultipartBodySet = new HashSet<>();
+                            for (Parameter parameter : method.getParameters()) {
+                                if (parameter.isAnnotationPresent(RequestPart.class)) {
+                                    Type paramType = parameter.getParameterizedType();
+                                    ResponseModelTypeResolver.Result reqResult = ResponseModelTypeResolver.resolve(paramType);
+                                    Class<?> reqDto = reqResult.getModelClass();
+                                    if (reqDto != null) {
+                                        ActionMultipartDto requestMultipartBody = new ActionMultipartDto();
+                                        requestMultipartBody.setKey(parameter.getName());
+                                        requestMultipartBody.setCollection(reqResult.isCollection());
+                                        requestMultipartBodySet.add(requestMultipartBody);
+                                    }
+                                }
+                            }
+
+                            //-- Response body
                             ResponseModelTypeResolver.Result resResult = ResponseModelTypeResolver.resolve(method.getGenericReturnType());
-                            String responseBodyModelId = null;
-                            boolean isResponseBodyCollection = false;
+                            ActionModelDto responseBody = new ActionModelDto();
                             if (resResult.getModelClass() != null) {
-                                responseBodyModelId = resResult.getModelClass().getCanonicalName();
-                                isResponseBodyCollection = resResult.isCollection();
+                                responseBody.setCollection(resResult.isCollection());
+                                responseBody.setModelId(resResult.getModelClass().getCanonicalName());
                                 if (seenDtoClasses.add(resResult.getModelClass())) {
                                     dtoDescriptions.addAll(ModelIntrospector.buildDtoGraph(resResult.getModelClass()));
                                 }
@@ -152,10 +186,10 @@ public class EndpointScannerService {
                                         .requestMethod(httpMethod)
                                         .accessLevel((featureInfo.accessLevel().equals(AccessLevel.NONE)) ? actionInfo.accessLevel() : featureInfo.accessLevel())
                                         .securityLevel(actionInfo.securityLevel())
-                                        .requestBodyModelId(requestBodyModelId)
-                                        .isRequestBodyCollection(isRequestBodyCollection)
-                                        .responseBodyModelId(responseBodyModelId)
-                                        .isResponseBodyCollection(isResponseBodyCollection)
+                                        .requestModel(requestBody)
+                                        .requestMultipart(requestMultipartBodySet)
+                                        .requestParams(requestParams)
+                                        .responseModel(responseBody)
                                         .operationName(method.getName())
                                         .build());
                             }
@@ -267,4 +301,73 @@ public class EndpointScannerService {
         }
         return RequestMethod.GET;
     }
+
+    private BaseType resolveBaseType(Parameter parameter) {
+
+        Class<?> type = parameter.getType();
+
+        // --- Collection types ---
+        if (Collection.class.isAssignableFrom(type)) {
+            if (Set.class.isAssignableFrom(type)) {
+                return BaseType.SET;
+            }
+            return BaseType.LIST;
+        }
+
+        if (Map.class.isAssignableFrom(type)) {
+            return BaseType.MAP;
+        }
+
+        // --- Primitive & wrapper types ---
+        if (type.equals(String.class)) {
+            return BaseType.STRING;
+        }
+        if (type.equals(Integer.class) || type.equals(int.class)) {
+            return BaseType.INTEGER;
+        }
+        if (type.equals(Long.class) || type.equals(long.class)) {
+            return BaseType.LONG;
+        }
+        if (type.equals(Boolean.class) || type.equals(boolean.class)) {
+            return BaseType.BOOLEAN;
+        }
+        if (type.equals(Float.class) || type.equals(float.class)) {
+            return BaseType.FLOAT;
+        }
+        if (type.equals(Double.class) || type.equals(double.class)) {
+            return BaseType.DOUBLE;
+        }
+
+        // --- Date types ---
+        if (Date.class.isAssignableFrom(type) ||
+                type.getName().startsWith("java.time")) {
+            return BaseType.DATE;
+        }
+
+        // --- Fallback ---
+        if (!type.isPrimitive() && !type.getName().startsWith("java.")) {
+            return BaseType.OBJECT;
+        }
+
+        return BaseType.UNKNOWN;
+    }
+
+    private String resolveRequestParamKey(Parameter parameter) {
+        RequestParam rp = parameter.getAnnotation(RequestParam.class);
+
+        if (rp == null) {
+            return parameter.getName();
+        }
+
+        if (!rp.name().isEmpty()) {
+            return rp.name();
+        }
+
+        if (!rp.value().isEmpty()) {
+            return rp.value();
+        }
+
+        return parameter.getName();
+    }
+
 }

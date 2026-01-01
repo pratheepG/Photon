@@ -38,7 +38,7 @@ public class ActionInfoDto {
     private Set<ActionParamDto> requestParams = new HashSet<>();
     private ActionModelDto responseModel;
     private ActionModelDto requestModel;
-    private Set<ActionMultipartDto> multipartModels = new HashSet<>();
+    private Set<ActionMultipartDto> requestMultipart = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

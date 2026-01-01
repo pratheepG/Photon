@@ -309,10 +309,10 @@ public class SdkGenerationProvider {
                                         am.put("name", a.getName());
                                         am.put("description", a.getDescription());
                                         am.put("requestMethod", a.getRequestMethod() == null ? null : a.getRequestMethod().name());
-                                        am.put("requestBodyModelId", a.getRequestBodyModelId());
-                                        am.put("responseBodyModelId", a.getResponseBodyModelId());
-                                        am.put("isRequestBodyCollection", a.getIsRequestBodyCollection());
-                                        am.put("isResponseBodyCollection", a.getIsResponseBodyCollection());
+                                        am.put("requestBodyModelId", a.getRequestModel().getModelId());
+                                        am.put("responseBodyModelId", a.getResponseModel().getModelId());
+                                        am.put("isRequestBodyCollection", a.getRequestModel().isCollection());
+                                        am.put("isResponseBodyCollection", a.getResponseModel().isCollection());
                                         am.put("securityLevel", a.getSecurityLevel() == null ? null : a.getSecurityLevel().name());
                                         am.put("accessLevel", a.getAccessLevel() == null ? null : a.getAccessLevel().name());
                                         actions.add(am);

@@ -5,6 +5,7 @@ import com.photon.endpoint.dto.ActionInfoDto;
 import com.photon.endpoint.dto.FeatureInfoDto;
 import com.photon.endpoint.dto.ModelDescriptionDto;
 import com.photon.endpoint.dto.ModelFieldDto;
+import com.photon.endpoint.enums.BaseType;
 import com.photon.grpc.endpoint.*;
 import com.photon.enums.SecurityLevel;
 import lombok.experimental.UtilityClass;
@@ -77,11 +78,27 @@ public class ProtoToDtoMapper {
                 .description(emptyToNull(proto.getDescription()))
                 .featureId(emptyToNull(proto.getFeatureId()))
                 .operationName(emptyToNull(proto.getOperationName()))
-                .requestBodyModelId(emptyToNull(proto.getRequestBodyModelId()))
-                .isRequestBodyCollection(proto.getIsRequestBodyCollection())
-                .responseBodyModelId(emptyToNull(proto.getResponseBodyModelId()))
-                .isResponseBodyCollection(proto.getIsResponseBodyCollection())
+                .requestModel(actionModelFromProto(proto.getRequestModel()))
+                .responseModel(actionModelFromProto(proto.getResponseModel()))
                 .build();
+
+        if(!proto.getRequestMultipartList().isEmpty()) {
+            Set<ActionMultipartDto> dtoSet = new LinkedHashSet<>();
+            proto.getRequestMultipartList()
+                    .forEach(actionMultipart -> {
+                        dtoSet.add(actionMultipartFromProto(actionMultipart));
+                    });
+            dto.setRequestMultipart(dtoSet);
+        }
+
+        if(!proto.getRequestParamsList().isEmpty()) {
+            Set<ActionParamDto> dtoSet = new LinkedHashSet<>();
+            proto.getRequestParamsList()
+                    .forEach(actionParam -> {
+                        dtoSet.add(actionParamFromProto(actionParam));
+                    });
+            dto.setRequestParams(dtoSet);
+        }
 
         if (proto.hasUserRoles()) {
             Map<String, Map<Long, String>> userRoles = new HashMap<>();
@@ -102,6 +119,30 @@ public class ProtoToDtoMapper {
             }
         }
 
+        return dto;
+    }
+
+    private static ActionModelDto actionModelFromProto(ActionModel proto) {
+        ActionModelDto dto = new ActionModelDto();
+        dto.setModelId(emptyToNull(proto.getModelId()));
+        dto.setKey(emptyToNull(proto.getKey()));
+        dto.setCollection(proto.getIsCollection());
+        return dto;
+    }
+
+    private static ActionMultipartDto actionMultipartFromProto(ActionMultipart proto) {
+        ActionMultipartDto dto = new ActionMultipartDto();
+        dto.setKey(emptyToNull(proto.getKey()));
+        dto.setCollection(proto.getIsCollection());
+        return dto;
+    }
+
+    private static ActionParamDto actionParamFromProto(ActionParam proto) {
+        ActionParamDto dto = new ActionParamDto();
+        dto.setKey(emptyToNull(proto.getKey()));
+        dto.setType(resolveFieldType(proto.getType()));
+        dto.setRequired(proto.getRequired());
+        dto.setCollection(proto.getIsCollection());
         return dto;
     }
 
@@ -140,5 +181,17 @@ public class ProtoToDtoMapper {
 
     private static String emptyToNull(String s) {
         return (s == null || s.isEmpty()) ? null : s;
+    }
+
+    private static com.photon.endpoint.enums.BaseType resolveFieldType(com.photon.grpc.endpoint.BaseType proto) {
+        if (proto != com.photon.grpc.endpoint.BaseType.BASE_UNKNOWN) {
+            try {
+                return com.photon.endpoint.enums.BaseType.valueOf(proto.name().replace("BASE_", ""));
+            } catch (Exception e) {
+                return com.photon.endpoint.enums.BaseType.UNKNOWN;
+            }
+        } else {
+            return com.photon.endpoint.enums.BaseType.UNKNOWN;
+        }
     }
 }

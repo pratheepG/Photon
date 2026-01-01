@@ -13,5 +13,6 @@ import lombok.*;
 public class ActionParamDto {
     private String key;
     private BaseType type;
+    private boolean required;
     private boolean isCollection;
 }

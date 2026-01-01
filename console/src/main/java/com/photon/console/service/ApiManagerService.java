@@ -321,7 +321,6 @@ public class ApiManagerService {
 
             Set<FeatureInfo> existingFeatures = existingEndpointDetails.getFeatures();
             Set<FeatureInfo> featuresToRemove = new HashSet<>(existingFeatures);
-            Set<String> modelIdsToRemove = new HashSet<>();
 
             for (FeatureInfo existingFeature : existingFeatures) {
                 if (featureMap.containsKey(existingFeature.getFeatureId())) {
@@ -352,10 +351,10 @@ public class ApiManagerService {
                                 existingAction.setName(actionInfoDto.getName());
                                 existingAction.setPath(actionInfoDto.getPath());
                                 existingAction.setRequestMethod(actionInfoDto.getRequestMethod());
-                                existingAction.setRequestBodyModelId(actionInfoDto.getRequestBodyModelId());
-                                existingAction.setResponseBodyModelId(actionInfoDto.getResponseBodyModelId());
-                                existingAction.setIsRequestBodyCollection(actionInfoDto.isRequestBodyCollection());
-                                existingAction.setIsResponseBodyCollection(actionInfoDto.isResponseBodyCollection());
+                                existingAction.setRequestModel(actionInfoDto.getRequestModel());
+                                existingAction.setResponseModel(actionInfoDto.getResponseModel());
+                                existingAction.setRequestMultipart(actionInfoDto.getRequestMultipart());
+                                existingAction.setRequestParams(actionInfoDto.getRequestParams());
                            // }
 
                             actionsToRemove.remove(existingAction);
@@ -366,10 +365,6 @@ public class ApiManagerService {
                     actionsToRemove.forEach(existingActions::remove);
 
                     actionsToRemove.forEach(actionInfo -> {
-                        if(!StringUtils.isEmpty(actionInfo.getRequestBodyModelId()))
-                            modelIdsToRemove.add(actionInfo.getRequestBodyModelId());
-                        if(!StringUtils.isEmpty(actionInfo.getResponseBodyModelId()))
-                            modelIdsToRemove.add(actionInfo.getResponseBodyModelId());
 
                         String routId = actionInfo.getFeatureId().concat("_").concat(actionInfo.getActionId());
                         String roleFeatureAction = actionInfo.getFeatureId().concat(":").concat(actionInfo.getActionId());
@@ -403,8 +398,6 @@ public class ApiManagerService {
             Set<ModelDescriptionDto> modelDtos = Optional.ofNullable(endpointDetailsDto.getModels()).orElse(Collections.emptySet());
 
             Set<Model> newModelEntities = new HashSet<>();
-
-            //modelIdsToRemove.forEach(existingModelMap::remove);
 
             for (ModelDescriptionDto dto : modelDtos) {
                 if (!existingModelMap.containsKey(dto.getId())) {

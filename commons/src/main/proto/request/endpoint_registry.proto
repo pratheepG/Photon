@@ -74,7 +74,8 @@ message ActionMultipart {
 message ActionParam {
   string key = 1;
   BaseType type = 2;
-  string isCollection = 3;
+  bool required = 3;
+  bool isCollection = 4;
 }
 
 message ModelField {
@@ -104,7 +105,7 @@ message ActionInfo {
   repeated ActionParam requestParams = 12;
   ActionModel responseModel = 13;
   ActionModel requestModel = 14;
-  repeated ActionMultipart multipartModels = 15;
+  repeated ActionMultipart requestMultipart = 15;
 }
 
 message FeatureInfo {

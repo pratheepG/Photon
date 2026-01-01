@@ -9,12 +9,14 @@ import com.photon.properties.ApplicationConfigProperties;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import lombok.extern.slf4j.Slf4j;
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+
 
 
 @Slf4j
@@ -25,12 +27,14 @@ public class ProtoEndpointRegistrationRunner implements ApplicationRunner {
 
     private final ManagedChannel channel;
     private final EndpointScannerService endpointScannerService;
-    private final EndpointRegistryGrpc.EndpointRegistryBlockingStub blockingStub;
+
+    @GrpcClient("console")
+    private EndpointRegistryGrpc.EndpointRegistryBlockingStub blockingStub;
 
     public ProtoEndpointRegistrationRunner(EndpointScannerService endpointScannerService, ApplicationConfigProperties applicationConfigProperties) {
         this.endpointScannerService = endpointScannerService;
         this.channel = ManagedChannelBuilder.forAddress(applicationConfigProperties.getConsoleGrpcHost(), applicationConfigProperties.getConsoleGrpcPort()).usePlaintext().build();
-        this.blockingStub = EndpointRegistryGrpc.newBlockingStub(channel);
+        //this.blockingStub = EndpointRegistryGrpc.newBlockingStub(channel);
     }
 
     @Async

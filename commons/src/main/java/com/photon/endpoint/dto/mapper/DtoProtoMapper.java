@@ -3,6 +3,8 @@ package com.photon.endpoint.dto.mapper;
 import com.photon.endpoint.dto.*;
 import com.photon.grpc.endpoint.*;
 
+import java.util.Objects;
+
 public final class DtoProtoMapper {
 
     public static EndpointDetails toProto(EndpointDetailsDto dto) {
@@ -36,6 +38,50 @@ public final class DtoProtoMapper {
         return b.build();
     }
 
+//    private static ActionInfo toProto(ActionInfoDto dto) {
+//        ActionInfo.Builder b = ActionInfo.newBuilder()
+//                .setId(nullToEmpty(dto.getId() == null ? null : dto.getId().toString()))
+//                .setActionId(nullToEmpty(dto.getActionId()))
+//                .setPath(nullToEmpty(dto.getPath()))
+//                .setName(nullToEmpty(dto.getName()))
+//                .setDescription(nullToEmpty(dto.getDescription()))
+//                .setFeatureId(nullToEmpty(dto.getFeatureId()))
+//                .setOperationName(nullToEmpty(dto.getOperationName()))
+//                .setRequestModel(Objects.isNull(dto.getRequestModel())? null : toProto(dto.getRequestModel()))
+//                .setResponseModel(Objects.isNull(dto.getResponseModel())? null :  toProto(dto.getResponseModel()))
+//                .setSecurityLevel(EnumMapper.toProto(dto.getSecurityLevel()))
+//                .setAccessLevel(EnumMapper.toProto(dto.getAccessLevel()))
+//                .setRequestMethod(EnumMapper.toProto(dto.getRequestMethod()));
+//
+//        if (dto.getRequestParams() != null) {
+//            dto.getRequestParams().forEach(p -> {
+//                if(!Objects.isNull(p))
+//                    b.getRequestParamsList().add(toProto(p));
+//            });
+//        }
+//
+//        if (dto.getRequestMultipart() != null) {
+//            dto.getRequestMultipart().forEach(m -> {
+//                if(!Objects.isNull(m))
+//                    b.getRequestMultipartList().add(toProto(m));
+//            });
+//        }
+//
+//        if (dto.getUserRoles() != null) {
+//            UserRolesMap.Builder urm = UserRolesMap.newBuilder();
+//            dto.getUserRoles().forEach((k, inner) -> {
+//                LongStringMap.Builder lsm = LongStringMap.newBuilder();
+//                if (inner != null) {
+//                    inner.forEach(lsm::putEntries);
+//                }
+//                urm.putEntries(k, lsm.build());
+//            });
+//            b.setUserRoles(urm.build());
+//        }
+//
+//        return b.build();
+//    }
+
     private static ActionInfo toProto(ActionInfoDto dto) {
         ActionInfo.Builder b = ActionInfo.newBuilder()
                 .setId(nullToEmpty(dto.getId() == null ? null : dto.getId().toString()))
@@ -45,13 +91,33 @@ public final class DtoProtoMapper {
                 .setDescription(nullToEmpty(dto.getDescription()))
                 .setFeatureId(nullToEmpty(dto.getFeatureId()))
                 .setOperationName(nullToEmpty(dto.getOperationName()))
-                .setRequestBodyModelId(nullToEmpty(dto.getRequestBodyModelId()))
-                .setIsRequestBodyCollection(dto.isRequestBodyCollection())
-                .setResponseBodyModelId(nullToEmpty(dto.getResponseBodyModelId()))
                 .setSecurityLevel(EnumMapper.toProto(dto.getSecurityLevel()))
                 .setAccessLevel(EnumMapper.toProto(dto.getAccessLevel()))
-                .setRequestMethod(EnumMapper.toProto(dto.getRequestMethod()))
-                .setIsResponseBodyCollection(dto.isResponseBodyCollection());
+                .setRequestMethod(EnumMapper.toProto(dto.getRequestMethod()));
+
+        if (dto.getRequestModel() != null) {
+            b.setRequestModel(toProto(dto.getRequestModel()));
+        }
+
+        if (dto.getResponseModel() != null) {
+            b.setResponseModel(toProto(dto.getResponseModel()));
+        }
+
+        if (dto.getRequestParams() != null) {
+            dto.getRequestParams().forEach(p -> {
+                if (p != null) {
+                    b.addRequestParams(toProto(p));
+                }
+            });
+        }
+
+        if (dto.getRequestMultipart() != null) {
+            dto.getRequestMultipart().forEach(m -> {
+                if (m != null) {
+                    b.addRequestMultipart(toProto(m));
+                }
+            });
+        }
 
         if (dto.getUserRoles() != null) {
             UserRolesMap.Builder urm = UserRolesMap.newBuilder();
@@ -66,6 +132,26 @@ public final class DtoProtoMapper {
         }
 
         return b.build();
+    }
+
+    private static ActionModel toProto(ActionModelDto dto) {
+        return ActionModel.newBuilder()
+                .setModelId(nullToEmpty(dto.getModelId()))
+                .setKey(nullToEmpty(dto.getKey()))
+                .setIsCollection(dto.isCollection()).build();
+    }
+
+    private static ActionMultipart toProto(ActionMultipartDto dto) {
+        return ActionMultipart.newBuilder()
+                .setKey(nullToEmpty(dto.getKey()))
+                .setIsCollection(dto.isCollection()).build();
+    }
+
+    private static ActionParam toProto(ActionParamDto dto) {
+        return ActionParam.newBuilder()
+                .setKey(nullToEmpty(dto.getKey()))
+                .setRequired(dto.isRequired())
+                .setIsCollection(dto.isCollection()).build();
     }
 
     private static ModelDescription toProto(ModelDescriptionDto dto) {
