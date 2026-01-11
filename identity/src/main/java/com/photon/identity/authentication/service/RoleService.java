@@ -252,7 +252,7 @@ public class RoleService {
         }
     }
 
-    public ApiResponseDto<?> getRoles(AccessLevel accessLevel, int pageNumber, int pageSize) throws ApplicationException {
+    public ApiResponseDto<Map<String, List<Map<Long, String>>>> getRoles(AccessLevel accessLevel, int pageNumber, int pageSize) throws ApplicationException {
         try {
             Pageable pageable = PageRequest.of(pageNumber, pageSize);
             List<AccessLevel> accessLevels = new ArrayList<>();

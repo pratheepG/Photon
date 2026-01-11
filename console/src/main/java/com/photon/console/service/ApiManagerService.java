@@ -21,6 +21,7 @@ import com.photon.endpoint.dto.ActionInfoDto;
 import com.photon.endpoint.dto.EndpointDetailsDto;
 import com.photon.endpoint.dto.FeatureInfoDto;
 import com.photon.endpoint.dto.ModelDescriptionDto;
+import com.photon.endpoint.enums.BaseType;
 import com.photon.enums.ExceptionEnum;
 import com.photon.enums.SecurityLevel;
 import com.photon.enums.SuccessEnum;
@@ -344,18 +345,26 @@ public class ApiManagerService {
                     for (ActionInfo existingAction : existingActions) {
                         if (actionMap.containsKey(existingAction.getActionId())) {
                             ActionInfoDto actionInfoDto = actionMap.get(existingAction.getActionId());
+                            existingAction.setActionId(actionInfoDto.getActionId());
+                            existingAction.setDescription(actionInfoDto.getDescription());
+                            existingAction.setName(actionInfoDto.getName());
+                            existingAction.setPath(actionInfoDto.getPath());
+                            existingAction.setRequestMethod(actionInfoDto.getRequestMethod());
+                            existingAction.setMultipartSchema(actionInfoDto.getMultipartSchema());
+                            existingAction.setRequestHeaders(actionInfoDto.getRequestHeaders());
+                            existingAction.setRequestParams(actionInfoDto.getRequestParams());
 
-                            //if (!actionInfoDto.equals(ActionInfoMapper.toDto(existingAction))) {
-                                existingAction.setActionId(actionInfoDto.getActionId());
-                                existingAction.setDescription(actionInfoDto.getDescription());
-                                existingAction.setName(actionInfoDto.getName());
-                                existingAction.setPath(actionInfoDto.getPath());
-                                existingAction.setRequestMethod(actionInfoDto.getRequestMethod());
-                                existingAction.setRequestModel(actionInfoDto.getRequestModel());
-                                existingAction.setResponseModel(actionInfoDto.getResponseModel());
-                                existingAction.setRequestMultipart(actionInfoDto.getRequestMultipart());
-                                existingAction.setRequestParams(actionInfoDto.getRequestParams());
-                           // }
+                            if(actionInfoDto.getRequestSchema().getType().equals(BaseType.UNKNOWN)){
+                                existingAction.setRequestSchema(null);
+                            } else {
+                                existingAction.setRequestSchema(actionInfoDto.getRequestSchema());
+                            }
+
+                            if(actionInfoDto.getResponseSchema().getType().equals(BaseType.UNKNOWN)){
+                                existingAction.setResponseSchema(null);
+                            } else {
+                                existingAction.setResponseSchema(actionInfoDto.getResponseSchema());
+                            }
 
                             actionsToRemove.remove(existingAction);
                             actionMap.remove(existingAction.getActionId());

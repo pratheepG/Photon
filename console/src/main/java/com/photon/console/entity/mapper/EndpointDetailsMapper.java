@@ -2,7 +2,6 @@ package com.photon.console.entity.mapper;
 
 import com.photon.console.entity.EndpointDetails;
 import com.photon.console.entity.FeatureInfo;
-import com.photon.console.entity.Model;
 import com.photon.endpoint.dto.EndpointDetailsDto;
 
 import java.util.Set;
@@ -29,10 +28,6 @@ public class EndpointDetailsMapper {
         Set<FeatureInfo> features = endpointDetailsDto.getFeatures().stream()
                 .map(FeatureInfoMapper::toEntity)
                 .collect(Collectors.toSet());
-
-//        Set<Model> models = endpointDetailsDto.getModels().stream()
-//                .map(ModelMapper::toEntity)
-//                .collect(Collectors.toSet());
 
         EndpointDetails endpointDetails = EndpointDetails.builder()
                 .id(endpointDetailsDto.getId())

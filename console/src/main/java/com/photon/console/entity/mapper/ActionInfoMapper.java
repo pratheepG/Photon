@@ -2,6 +2,7 @@ package com.photon.console.entity.mapper;
 
 import com.photon.console.entity.ActionInfo;
 import com.photon.endpoint.dto.ActionInfoDto;
+import com.photon.endpoint.enums.BaseType;
 
 public class ActionInfoMapper {
 
@@ -21,10 +22,11 @@ public class ActionInfoMapper {
                 .requestMethod(actionInfo.getRequestMethod())
                 .description(actionInfo.getDescription())
                 .userRoles(actionInfo.getUserRoles())
-                .requestMultipart(actionInfo.getRequestMultipart())
-                .requestModel(actionInfo.getRequestModel())
+                .multipartSchema(actionInfo.getMultipartSchema())
+                .requestSchema(actionInfo.getRequestSchema())
                 .requestParams(actionInfo.getRequestParams())
-                .responseModel(actionInfo.getResponseModel())
+                .responseSchema(actionInfo.getResponseSchema())
+                .requestHeaders(actionInfo.getRequestHeaders())
                 .operationName(actionInfo.getOperationName())
                 .build();
     }
@@ -34,7 +36,7 @@ public class ActionInfoMapper {
             return null;
         }
 
-        return ActionInfo.builder()
+        ActionInfo a = ActionInfo.builder()
                 .id(actionInfoDto.getId())
                 .actionId(actionInfoDto.getActionId())
                 .name(actionInfoDto.getName())
@@ -45,12 +47,16 @@ public class ActionInfoMapper {
                 .description(actionInfoDto.getDescription())
                 .featureId(actionInfoDto.getFeatureId())
                 .userRoles(actionInfoDto.getUserRoles())
-                .requestMultipart(actionInfoDto.getRequestMultipart())
-                .requestModel(actionInfoDto.getRequestModel())
+                .multipartSchema(actionInfoDto.getMultipartSchema())
                 .requestParams(actionInfoDto.getRequestParams())
-                .responseModel(actionInfoDto.getResponseModel())
+                .requestHeaders(actionInfoDto.getRequestHeaders())
                 .operationName(actionInfoDto.getOperationName())
                 .build();
+        if(!actionInfoDto.getRequestSchema().getType().equals(BaseType.UNKNOWN))
+            a.setRequestSchema(actionInfoDto.getRequestSchema());
+        if(!actionInfoDto.getResponseSchema().getType().equals(BaseType.UNKNOWN))
+            a.setResponseSchema(actionInfoDto.getResponseSchema());
+        return a;
     }
 
     public static ActionInfo updateEntityFromDto(ActionInfoDto actionInfoDto, ActionInfo actionInfo) {

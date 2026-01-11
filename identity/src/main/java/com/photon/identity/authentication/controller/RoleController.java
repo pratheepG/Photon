@@ -19,7 +19,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/role")
-@FeatureInfo(id = "ROLE", name = "User Roles", description = "User Role API")
+@FeatureInfo(id = "ROLE", name = "Role", description = "User Role API")
 public class RoleController {
 
     private final RoleService roleService;
@@ -48,7 +48,7 @@ public class RoleController {
 
     @GetMapping(value = "/lookup")
     @ActionInfo(id = "GET_ALL_ROLE_LOOKUP_BY_PAGE", name = "GET_ALL_ROLE_LOOKUP_BY_PAGE", accessLevel = AccessLevel.VIEWER, description = "Get all role lookup by page")
-    public ResponseEntity<ApiResponseDto<?>> getRoles(@RequestParam(required = false, defaultValue = "VIEWER") AccessLevel accessLevel, @RequestParam(required = false) int pageNumber, int pageSize) {
+    public ResponseEntity<ApiResponseDto<Map<String, List<Map<Long, String>>>>> getRoles(@RequestParam(required = false, defaultValue = "VIEWER") AccessLevel accessLevel, @RequestParam(required = false) int pageNumber, int pageSize) {
         return ResponseEntity.ok().body(this.roleService.getRoles(accessLevel, pageNumber, pageSize));
     }
 

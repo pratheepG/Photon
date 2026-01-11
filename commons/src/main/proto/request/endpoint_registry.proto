@@ -20,6 +20,8 @@ enum BaseType {
   BASE_LIST = 9;
   BASE_SET = 10;
   BASE_MAP = 11;
+  BASE_DTO = 12;
+  BASE_MULTIPART = 13;
 }
 
 enum SecurityLevel {
@@ -60,22 +62,18 @@ message UserRolesMap {
   map<string, LongStringMap> entries = 1;
 }
 
-message ActionModel {
-  string key = 1;
-  string modelId = 2;
-  bool isCollection = 3;
-}
-
-message ActionMultipart {
-  string key = 1;
-  bool isCollection = 3;
-}
-
-message ActionParam {
+message ApiTypeNode {
   string key = 1;
   BaseType type = 2;
-  bool required = 3;
-  bool isCollection = 4;
+  string modelId = 3;
+  ApiTypeNode element = 4;
+  MapNode map = 5;
+  bool required = 6;
+}
+
+message MapNode {
+  ApiTypeNode key=1;
+  ApiTypeNode value=2;
 }
 
 message ModelField {
@@ -102,10 +100,11 @@ message ActionInfo {
   string featureId = 9;
   UserRolesMap userRoles = 10;
   string operationName = 11;
-  repeated ActionParam requestParams = 12;
-  ActionModel responseModel = 13;
-  ActionModel requestModel = 14;
-  repeated ActionMultipart requestMultipart = 15;
+  repeated ApiTypeNode requestParams = 12;
+  repeated ApiTypeNode requestHeaders = 13;
+  ApiTypeNode responseSchema = 14;
+  ApiTypeNode requestSchema = 15;
+  repeated ApiTypeNode multipartSchema = 16;
 }
 
 message FeatureInfo {

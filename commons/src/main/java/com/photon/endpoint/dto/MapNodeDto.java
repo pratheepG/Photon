@@ -9,8 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ActionModelDto {
-    private String key;
-    private String modelId;
-    private boolean isCollection;
+public class MapNodeDto {
+    private ApiTypeNodeDto key;
+    private ApiTypeNodeDto value;
 }

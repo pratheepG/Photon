@@ -8,7 +8,6 @@ import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.apache.commons.lang.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

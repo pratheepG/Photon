@@ -23,7 +23,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/user")
-@FeatureInfo(id = "USER", name = "User records", description = "Users API")
+@FeatureInfo(id = "USER", name = "User", description = "Users API")
 public class UserController {
 
     private final UserService userService;
@@ -42,19 +42,19 @@ public class UserController {
 
     @GetMapping(value = "/get-user")
     @ActionInfo(id = "GET_ALL_USER_BY_PAGE", name = "GET_ALL_USER_BY_PAGE", accessLevel = AccessLevel.ADMIN, description = "Get the users list for back-office/admin-panel")
-    public ResponseEntity<ApiResponseDto<List<UserDto>>> getAllUser(@RequestParam(required = false) int pageNumber, int pageSize) {
+    public ResponseEntity<ApiResponseDto<List<UserDto>>> getAllUser(@RequestParam(required = false) int pageNumber, @RequestParam(required = false) int pageSize) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUser(pageNumber, pageSize));
     }
 
     @GetMapping(value = "/get-user-list")
     @ActionInfo(id = "GET_USER_LIST_BY_PAGE", name = "GET_USER_LIST_BY_PAGE", accessLevel = AccessLevel.ADMIN, description = "Get the users list with min data for back-office/admin-panel")
-    public ResponseEntity<ApiResponseDto<List<UserListDTO>>> getUserList(@RequestParam(required = false) int pageNumber, int pageSize) {
+    public ResponseEntity<ApiResponseDto<List<UserListDTO>>> getUserList(@RequestParam(required = false) int pageNumber, @RequestParam(required = false) int pageSize) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUserMinData(pageNumber, pageSize));
     }
 
     @PatchMapping(value = "/update-user-status")
     @ActionInfo(id = "UPDATE_USER_STATUS", name = "UPDATE_USER_STATUS", accessLevel = AccessLevel.ADMIN, description = "Update user status")
-    public ResponseEntity<ApiResponseDto<?>> updateUserStatus(@RequestParam boolean isEnabled, String userId) {
+    public ResponseEntity<ApiResponseDto<?>> updateUserStatus(@RequestParam boolean isEnabled, @RequestParam String userId) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.updateUserStatus(isEnabled, userId));
     }
 
@@ -87,7 +87,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/get-server-user")
-    public ResponseEntity<ApiResponseDto<?>> getAllServerUser(@RequestParam(required = false) int pageNumber, int pageSize) {
+    public ResponseEntity<ApiResponseDto<?>> getAllServerUser(@RequestParam(required = false) int pageNumber, @RequestParam(required = false) int pageSize) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.getAllServerConsoleUser(pageNumber, pageSize));
     }
 

@@ -10,9 +10,25 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ActionParamDto {
+public class ApiTypeNodeDto {
     private String key;
+
+    /**
+     * Note: STRING, DTO, LIST, MAP, etc.
+     */
     private BaseType type;
+
+    private String modelId;
+
+    /**
+     * Note: LIST / SET element
+     */
+    private ApiTypeNodeDto element;
+
+    /**
+     * Note: key-value structure
+     */
+    private MapNodeDto map;
+
     private boolean required;
-    private boolean isCollection;
 }

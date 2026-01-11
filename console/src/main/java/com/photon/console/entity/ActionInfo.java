@@ -1,12 +1,9 @@
 package com.photon.console.entity;
 
-import com.photon.console.entity.converter.ActionModelConverter;
-import com.photon.console.entity.converter.ActionMultipartConverter;
-import com.photon.console.entity.converter.ActionParamConverter;
+import com.photon.console.entity.converter.ApiTypeNodeConverter;
+import com.photon.console.entity.converter.ApiTypeNodeSetConverter;
 import com.photon.console.entity.converter.MapToJsonConverter;
-import com.photon.endpoint.dto.ActionModelDto;
-import com.photon.endpoint.dto.ActionMultipartDto;
-import com.photon.endpoint.dto.ActionParamDto;
+import com.photon.endpoint.dto.ApiTypeNodeDto;
 import com.photon.endpoint.enums.AccessLevel;
 import com.photon.enums.SecurityLevel;
 import jakarta.persistence.*;
@@ -67,21 +64,25 @@ public class ActionInfo {
     @Column(name = "operation_name")
     private String operationName;
 
-    @Convert(converter = ActionParamConverter.class)
+    @Convert(converter = ApiTypeNodeSetConverter.class)
     @Column(name = "request_params", columnDefinition = "TEXT")
-    private Set<ActionParamDto> requestParams = new HashSet<>();
+    private Set<ApiTypeNodeDto> requestParams = new HashSet<>();
 
-    @Convert(converter = ActionModelConverter.class)
-    @Column(name = "response_model", columnDefinition = "TEXT")
-    private ActionModelDto responseModel;
+    @Convert(converter = ApiTypeNodeSetConverter.class)
+    @Column(name = "request_headers", columnDefinition = "TEXT")
+    private Set<ApiTypeNodeDto> requestHeaders = new HashSet<>();
 
-    @Convert(converter = ActionModelConverter.class)
-    @Column(name = "request_model", columnDefinition = "TEXT")
-    private ActionModelDto requestModel;
+    @Convert(converter = ApiTypeNodeConverter.class)
+    @Column(name = "response_schema", columnDefinition = "TEXT")
+    private ApiTypeNodeDto responseSchema;
 
-    @Convert(converter = ActionMultipartConverter.class)
-    @Column(name = "request_multipart", columnDefinition = "TEXT")
-    private Set<ActionMultipartDto> requestMultipart = new HashSet<>();
+    @Convert(converter = ApiTypeNodeConverter.class)
+    @Column(name = "request_schema", columnDefinition = "TEXT")
+    private ApiTypeNodeDto requestSchema;
+
+    @Convert(converter = ApiTypeNodeSetConverter.class)
+    @Column(name = "multipart_schema", columnDefinition = "TEXT")
+    private Set<ApiTypeNodeDto> multipartSchema = new HashSet<>();
 
     @Override
     public final boolean equals(Object o) {

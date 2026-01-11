@@ -60,7 +60,6 @@ public class ResponseModelTypeResolver {
         return clazz == Mono.class ||
                 clazz == Flux.class ||
                 clazz == Optional.class ||
-                clazz == ResponseEntity.class ||
-                clazz == ApiResponseDto.class;
+                clazz == ResponseEntity.class;
     }
 }

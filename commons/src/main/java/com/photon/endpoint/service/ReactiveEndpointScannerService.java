@@ -11,6 +11,7 @@ import com.photon.endpoint.utils.ResponseModelTypeResolver;
 import com.photon.enums.ExceptionEnum;
 import com.photon.exception.ApplicationException;
 import com.photon.properties.ApplicationConfigProperties;
+import com.photon.utils.PhotonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.ApplicationContext;
@@ -24,9 +25,7 @@ import org.springframework.web.util.pattern.PathPattern;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,14 +34,14 @@ import java.util.stream.Collectors;
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 public class ReactiveEndpointScannerService {
 
-    private final ApplicationConfigProperties applicationConfigProperties;
+    private final ApplicationConfigProperties config;
     private final ApplicationContext applicationContext;
     private final RequestMappingHandlerMapping handlerMapping;
 
-    public ReactiveEndpointScannerService(ApplicationConfigProperties applicationConfigProperties,
+    public ReactiveEndpointScannerService(ApplicationConfigProperties config,
                                           ApplicationContext applicationContext,
                                           RequestMappingHandlerMapping requestMappingHandlerMapping) {
-        this.applicationConfigProperties = applicationConfigProperties;
+        this.config = config;
         this.applicationContext = applicationContext;
         this.handlerMapping = requestMappingHandlerMapping;
     }
@@ -53,7 +52,7 @@ public class ReactiveEndpointScannerService {
                     Map<RequestMappingInfo, HandlerMethod> mappings = handlerMapping.getHandlerMethods();
                     String[] beanNames = applicationContext.getBeanNamesForAnnotation(FeatureInfo.class);
 
-                    Set<Class<?>> annotatedClasses = Arrays.stream(beanNames)
+                    Set<Class<?>> controllers = Arrays.stream(beanNames)
                             .map(applicationContext::getType)
                             .filter(Objects::nonNull)
                             .collect(Collectors.toSet());
@@ -63,10 +62,9 @@ public class ReactiveEndpointScannerService {
                     Set<Class<?>> seenDtoClasses = new HashSet<>();
                     Set<ModelDescriptionDto> dtoDescriptions = new LinkedHashSet<>();
 
-                    for (Class<?> clazz : annotatedClasses) {
+                    for (Class<?> clazz : controllers) {
 
-                        FeatureInfo featureInfo = clazz.getAnnotation(FeatureInfo.class);
-                        if (featureInfo == null) continue;
+                        FeatureInfo featureInfo = PhotonUtils.requireNonNull(clazz.getAnnotation(FeatureInfo.class));
 
                         String basePath = "";
                         if (clazz.isAnnotationPresent(RequestMapping.class)) {
@@ -78,87 +76,48 @@ public class ReactiveEndpointScannerService {
 
                         Set<ActionInfoDto> actions = new LinkedHashSet<>();
 
-                        for (Method method : clazz.getMethods()) {
+                        for (Method method : clazz.getDeclaredMethods()) {
 
                             if (!method.isAnnotationPresent(ActionInfo.class)) continue;
                             ActionInfo actionInfo = method.getAnnotation(ActionInfo.class);
 
-                            // ---------- Request Body ----------
-                            ActionModelDto requestBody = null;
-                            for (Parameter parameter : method.getParameters()) {
-                                if (parameter.isAnnotationPresent(RequestBody.class)) {
-                                    requestBody = new ActionModelDto();
-                                    Type paramType = parameter.getParameterizedType();
-                                    ResponseModelTypeResolver.Result reqResult =
-                                            ResponseModelTypeResolver.resolve(paramType);
+                            ApiTypeNodeDto requestSchema = null;
+                            ApiTypeNodeDto responseSchema = null;
+                            Set<ApiTypeNodeDto> multipartSchema = new LinkedHashSet<>();
+                            Set<ApiTypeNodeDto> requestHeaders = new LinkedHashSet<>();
+                            Set<ApiTypeNodeDto> requestParams = new LinkedHashSet<>();
 
-                                    Class<?> reqDto = reqResult.getModelClass();
-                                    if (reqDto != null) {
-                                        requestBody.setKey(parameter.getName());
-                                        requestBody.setModelId(reqDto.getCanonicalName());
-                                        requestBody.setCollection(reqResult.isCollection());
+                            // --------------- Parameters --------------
+                            for (Parameter p : method.getParameters()) {
 
-                                        if (seenDtoClasses.add(reqDto)) {
-                                            dtoDescriptions.addAll(
-                                                    ModelIntrospector.buildDtoGraph(reqDto)
-                                            );
-                                        }
-                                    }
-                                    break;
+                                if (p.isAnnotationPresent(RequestBody.class)) {
+                                    requestSchema = buildApiTypeNode(p.getParameterizedType(), p.getName(), true, seenDtoClasses, dtoDescriptions);
+                                }
+
+                                if (p.isAnnotationPresent(RequestPart.class)) {
+                                    multipartSchema.add(buildApiTypeNode(p.getParameterizedType(), p.getName(), true, seenDtoClasses, dtoDescriptions));
+                                }
+
+                                if (p.isAnnotationPresent(RequestHeader.class)) {
+                                    RequestHeader rh = p.getAnnotation(RequestHeader.class);
+                                    requestHeaders.add(buildApiTypeNode(p.getParameterizedType(), resolveHeaderKey(p), rh.required(), seenDtoClasses, dtoDescriptions));
+                                }
+
+                                if (p.isAnnotationPresent(RequestParam.class)) {
+                                    RequestParam rp = p.getAnnotation(RequestParam.class);
+                                    requestParams.add(buildApiTypeNode(p.getParameterizedType(), resolveRequestParamKey(p), rp.required(), seenDtoClasses, dtoDescriptions));
                                 }
                             }
 
-                            // ---------- Request Params ----------
-                            Set<ActionParamDto> requestParams = new LinkedHashSet<>();
-                            for (Parameter parameter : method.getParameters()) {
-                                if (parameter.isAnnotationPresent(RequestParam.class)) {
-                                    RequestParam rp = parameter.getAnnotation(RequestParam.class);
+                            // --------------- Response --------------
+                            ResponseModelTypeResolver.Result res = ResponseModelTypeResolver.resolve(method.getGenericReturnType());
 
-                                    ActionParamDto param = new ActionParamDto();
-                                    param.setKey(resolveRequestParamKey(parameter));
-                                    param.setType(resolveBaseType(parameter));
-                                    param.setCollection(Collection.class.isAssignableFrom(parameter.getType()));
-                                    param.setRequired(rp.required());
-
-                                    requestParams.add(param);
-                                }
+                            if (res.getModelClass() != null) {
+                                responseSchema = buildResponseSchema(method.getGenericReturnType(), seenDtoClasses, dtoDescriptions);
                             }
 
-                            // ---------- Multipart ----------
-                            Set<ActionMultipartDto> multipart = new LinkedHashSet<>();
-                            for (Parameter parameter : method.getParameters()) {
-                                if (parameter.isAnnotationPresent(RequestPart.class)) {
-                                    ResponseModelTypeResolver.Result reqResult =
-                                            ResponseModelTypeResolver.resolve(parameter.getParameterizedType());
-
-                                    ActionMultipartDto mp = new ActionMultipartDto();
-                                    mp.setKey(parameter.getName());
-                                    mp.setCollection(reqResult.isCollection());
-
-                                    multipart.add(mp);
-                                }
-                            }
-
-                            // ---------- Response Body ----------
-                            ActionModelDto responseBody = null;
-                            ResponseModelTypeResolver.Result resResult =
-                                    ResponseModelTypeResolver.resolve(method.getGenericReturnType());
-
-                            if (resResult.getModelClass() != null) {
-                                responseBody = new ActionModelDto();
-                                responseBody.setModelId(resResult.getModelClass().getCanonicalName());
-                                responseBody.setCollection(resResult.isCollection());
-
-                                if (seenDtoClasses.add(resResult.getModelClass())) {
-                                    dtoDescriptions.addAll(
-                                            ModelIntrospector.buildDtoGraph(resResult.getModelClass())
-                                    );
-                                }
-                            }
-
-                            // ---------- Mapping ----------
+                            // ---------------- Mapping ---------------
                             for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : mappings.entrySet()) {
-
                                 if (!entry.getValue().getMethod().equals(method)) continue;
 
                                 RequestMappingInfo info = entry.getKey();
@@ -183,16 +142,13 @@ public class ReactiveEndpointScannerService {
                                         .featureId(featureInfo.id())
                                         .path(fullPath)
                                         .requestMethod(httpMethod)
-                                        .accessLevel(
-                                                featureInfo.accessLevel().equals(AccessLevel.NONE)
-                                                        ? actionInfo.accessLevel()
-                                                        : featureInfo.accessLevel()
-                                        )
+                                        .accessLevel(featureInfo.accessLevel().equals(AccessLevel.NONE) ? actionInfo.accessLevel() : featureInfo.accessLevel())
                                         .securityLevel(actionInfo.securityLevel())
-                                        .requestModel(requestBody)
+                                        .requestSchema(requestSchema)
+                                        .multipartSchema(multipartSchema)
+                                        .responseSchema(responseSchema)
+                                        .requestHeaders(requestHeaders)
                                         .requestParams(requestParams)
-                                        .requestMultipart(multipart)
-                                        .responseModel(responseBody)
                                         .operationName(method.getName())
                                         .build());
                             }
@@ -208,10 +164,10 @@ public class ReactiveEndpointScannerService {
                                 .build());
                     }
 
-                    endpointDetails.setId(applicationConfigProperties.getApplicationName());
-                    endpointDetails.setName(applicationConfigProperties.getApplicationName());
-                    endpointDetails.setClientId(applicationConfigProperties.getXApiKey());
-                    endpointDetails.setClientSecret(applicationConfigProperties.getXApiSecret());
+                    endpointDetails.setId(config.getApplicationName());
+                    endpointDetails.setName(config.getApplicationName());
+                    endpointDetails.setClientId(config.getXApiKey());
+                    endpointDetails.setClientSecret(config.getXApiSecret());
                     endpointDetails.setFeatures(features);
                     endpointDetails.setModels(dtoDescriptions);
 
@@ -223,46 +179,151 @@ public class ReactiveEndpointScannerService {
 
                 })
                 .subscribeOn(Schedulers.boundedElastic())
-                .onErrorMap(e ->
-                        new ApplicationException(
-                                ExceptionEnum.ERR_1009.getErrorResponseBody(e.getMessage()),
-                                HttpStatus.OK
-                        )
-                );
+                .doOnError(e -> log.error("❌ Reactive endpoint scan failed", e))
+                .onErrorMap(e -> new ApplicationException(ExceptionEnum.ERR_1009.getErrorResponseBody(e.getMessage()), HttpStatus.OK));
     }
 
-    // ---------- Helpers (same as servlet) ----------
+    // ======================================================
+    // ApiTypeNode TREE BUILDER
+    // ======================================================
 
-    private BaseType resolveBaseType(Parameter parameter) {
-        Class<?> type = parameter.getType();
+    private ApiTypeNodeDto buildApiTypeNode(Type type, String key, boolean required, Set<Class<?>> seenDtoClasses, Set<ModelDescriptionDto> dtoDescriptions) {
 
-        if (Collection.class.isAssignableFrom(type)) {
-            return Set.class.isAssignableFrom(type) ? BaseType.SET : BaseType.LIST;
+        ApiTypeNodeDto.ApiTypeNodeDtoBuilder b = ApiTypeNodeDto.builder()
+                .key(key)
+                .required(required);
+
+        if (type instanceof ParameterizedType pt) {
+            Type raw = pt.getRawType();
+
+            if (raw instanceof Class<?> rawClass) {
+
+                if (Collection.class.isAssignableFrom(rawClass)) {
+                    b.type(Set.class.isAssignableFrom(rawClass) ? BaseType.SET : BaseType.LIST);
+                    b.element(buildApiTypeNode(pt.getActualTypeArguments()[0], null, true, seenDtoClasses, dtoDescriptions));
+                    return b.build();
+                }
+
+                if (Map.class.isAssignableFrom(rawClass)) {
+                    b.type(BaseType.MAP);
+                    b.map(MapNodeDto.builder()
+                            .key(buildApiTypeNode(pt.getActualTypeArguments()[0], null, true, seenDtoClasses, dtoDescriptions))
+                            .value(buildApiTypeNode(pt.getActualTypeArguments()[1], null, true, seenDtoClasses, dtoDescriptions))
+                            .build());
+                    return b.build();
+                }
+            }
         }
-        if (Map.class.isAssignableFrom(type)) return BaseType.MAP;
-        if (type == String.class) return BaseType.STRING;
-        if (type == int.class || type == Integer.class) return BaseType.INTEGER;
-        if (type == long.class || type == Long.class) return BaseType.LONG;
-        if (type == boolean.class || type == Boolean.class) return BaseType.BOOLEAN;
-        if (type == float.class || type == Float.class) return BaseType.FLOAT;
-        if (type == double.class || type == Double.class) return BaseType.DOUBLE;
 
-        if (Date.class.isAssignableFrom(type) || type.getName().startsWith("java.time")) {
-            return BaseType.DATE;
+        if (type instanceof Class<?> clazz) {
+            BaseType base = resolveBaseType(clazz);
+            if (base != BaseType.OBJECT) {
+                b.type(base);
+                return b.build();
+            }
+
+            b.type(BaseType.DTO);
+            b.modelId(clazz.getCanonicalName());
+
+            if (seenDtoClasses.add(clazz)) {
+                dtoDescriptions.addAll(ModelIntrospector.buildDtoGraph(clazz));
+            }
+            return b.build();
         }
 
-        if (!type.isPrimitive() && !type.getName().startsWith("java.")) {
-            return BaseType.OBJECT;
-        }
-
-        return BaseType.UNKNOWN;
+        b.type(BaseType.UNKNOWN);
+        return b.build();
     }
 
-    private String resolveRequestParamKey(Parameter parameter) {
-        RequestParam rp = parameter.getAnnotation(RequestParam.class);
-        if (rp == null) return parameter.getName();
+    private Type unwrapTransport(Type type) {
+
+        while (type instanceof ParameterizedType pt) {
+            Type raw = pt.getRawType();
+
+            if (!(raw instanceof Class<?> rawClass)) break;
+
+            if (rawClass.getName().equals("reactor.core.publisher.Mono") ||
+                    rawClass.getName().equals("reactor.core.publisher.Flux")) {
+                type = pt.getActualTypeArguments()[0];
+                continue;
+            }
+
+            if (rawClass == org.springframework.http.ResponseEntity.class) {
+                type = pt.getActualTypeArguments()[0];
+                continue;
+            }
+
+            break;
+        }
+        return type;
+    }
+
+    private ApiTypeNodeDto buildResponseSchema(Type returnType, Set<Class<?>> seenDtoClasses, Set<ModelDescriptionDto> dtoDescriptions) {
+
+        /* 1️⃣ unwrap Mono / Flux / ResponseEntity */
+        Type type = unwrapTransport(returnType);
+
+        /* 2️⃣ ApiResponseDto<T> */
+        if (type instanceof ParameterizedType pt &&
+                pt.getRawType() instanceof Class<?> raw &&
+                raw == com.photon.dto.ApiResponseDto.class) {
+
+            ApiTypeNodeDto.ApiTypeNodeDtoBuilder parent = ApiTypeNodeDto.builder()
+                    .key("-").type(BaseType.DTO)
+                    .modelId(raw.getCanonicalName())
+                    .required(true);
+
+            // 🔹 Defensive: check inner payload existence
+            Type[] args = pt.getActualTypeArguments();
+            if (args != null && args.length == 1) {
+
+                Type inner = args[0];
+
+                // 🔹 Ignore meaningless payloads
+                if (inner != null && inner != Void.class && inner != void.class
+                        && inner != Object.class && !(inner instanceof WildcardType)) {
+
+                    ApiTypeNodeDto payload = buildApiTypeNode(inner, null, true, seenDtoClasses, dtoDescriptions);
+
+                    if (payload != null && payload.getType() != BaseType.UNKNOWN) {
+                        parent.element(payload);
+                    }
+                }
+            }
+
+            return parent.build();
+        }
+
+        /* 3️⃣ Normal response (no ApiResponseDto) */
+        return buildApiTypeNode(type, "-", true, seenDtoClasses, dtoDescriptions);
+    }
+
+    // ======================================================
+    // HELPERS
+    // ======================================================
+
+    private String resolveRequestParamKey(Parameter p) {
+        RequestParam rp = p.getAnnotation(RequestParam.class);
         if (!rp.name().isEmpty()) return rp.name();
         if (!rp.value().isEmpty()) return rp.value();
-        return parameter.getName();
+        return p.getName();
+    }
+
+    private String resolveHeaderKey(Parameter p) {
+        RequestHeader rh = p.getAnnotation(RequestHeader.class);
+        if (!rh.name().isEmpty()) return rh.name();
+        if (!rh.value().isEmpty()) return rh.value();
+        return p.getName();
+    }
+
+    private BaseType resolveBaseType(Class<?> type) {
+        if (type == String.class) return BaseType.STRING;
+        if (type == Integer.class || type == int.class) return BaseType.INTEGER;
+        if (type == Long.class || type == long.class) return BaseType.LONG;
+        if (type == Boolean.class || type == boolean.class) return BaseType.BOOLEAN;
+        if (type == Float.class || type == float.class) return BaseType.FLOAT;
+        if (type == Double.class || type == double.class) return BaseType.DOUBLE;
+        if (Date.class.isAssignableFrom(type) || type.getName().startsWith("java.time")) return BaseType.DATE;
+        return BaseType.OBJECT;
     }
 }

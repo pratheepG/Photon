@@ -31,7 +31,7 @@
         <java.version>17</java.version>
         <spring-cloud.version>2023.0.4</spring-cloud.version>
         <spring-boot-admin.version>3.3.4</spring-boot-admin.version>
-        <grpc.version>1.63.0</grpc.version>
+        <grpc-bom.version>1.64.0</grpc-bom.version>
         <grpc-spring-boot.version>3.1.0.RELEASE</grpc-spring-boot.version>
     </properties>
     <dependencyManagement>
@@ -47,6 +47,13 @@
                 <groupId>de.codecentric</groupId>
                 <artifactId>spring-boot-admin-dependencies</artifactId>
                 <version>${spring-boot-admin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-bom</artifactId>
+                <version>${grpc-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -76,12 +83,7 @@
             <scope>provided</scope>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-docker-compose</artifactId>-->
-<!--            <scope>runtime</scope>-->
-<!--            <optional>true</optional>-->
-<!--        </dependency>-->
+
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -209,7 +211,7 @@
             <artifactId>sendgrid-java</artifactId>
             <version>4.9.3</version>
         </dependency>
-        <!--                  -->
+        <!--                 -->
 
 
         <!-- SMS Providers   -->
@@ -239,39 +241,32 @@
             <version>6.2.2</version>
         </dependency>
 
-        <!-- gRPC Spring Boot Starter -->
+
+
+
+        <!-- Core gRPC dependencies (must match versions) -->
+        <dependency>
+            <groupId>net.devh</groupId>
+            <artifactId>grpc-spring-boot-starter</artifactId>
+            <version>${grpc-spring-boot.version}</version>
+        </dependency>
         <dependency>
             <groupId>net.devh</groupId>
             <artifactId>grpc-server-spring-boot-starter</artifactId>
             <version>${grpc-spring-boot.version}</version>
         </dependency>
-
-        <!-- Core gRPC dependencies (must match versions) -->
         <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-core</artifactId>
-            <version>${grpc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-netty-shaded</artifactId>
-            <version>${grpc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-stub</artifactId>
-            <version>${grpc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-protobuf</artifactId>
-            <version>${grpc.version}</version>
+            <groupId>net.devh</groupId>
+            <artifactId>grpc-client-spring-boot-starter</artifactId>
+            <version>${grpc-spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java-util</artifactId>
             <version>3.25.1</version>
         </dependency>
+
+
 
         <dependency>
             <groupId>javax.annotation</groupId>

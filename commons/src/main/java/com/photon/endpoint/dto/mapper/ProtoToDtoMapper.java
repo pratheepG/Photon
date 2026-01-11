@@ -5,7 +5,6 @@ import com.photon.endpoint.dto.ActionInfoDto;
 import com.photon.endpoint.dto.FeatureInfoDto;
 import com.photon.endpoint.dto.ModelDescriptionDto;
 import com.photon.endpoint.dto.ModelFieldDto;
-import com.photon.endpoint.enums.BaseType;
 import com.photon.grpc.endpoint.*;
 import com.photon.enums.SecurityLevel;
 import lombok.experimental.UtilityClass;
@@ -78,28 +77,40 @@ public class ProtoToDtoMapper {
                 .description(emptyToNull(proto.getDescription()))
                 .featureId(emptyToNull(proto.getFeatureId()))
                 .operationName(emptyToNull(proto.getOperationName()))
-                .requestModel(actionModelFromProto(proto.getRequestModel()))
-                .responseModel(actionModelFromProto(proto.getResponseModel()))
+                .requestSchema(apiTypeNodeFromProto(proto.getRequestSchema()))
+                .responseSchema(apiTypeNodeFromProto(proto.getResponseSchema()))
                 .build();
 
-        if(!proto.getRequestMultipartList().isEmpty()) {
-            Set<ActionMultipartDto> dtoSet = new LinkedHashSet<>();
-            proto.getRequestMultipartList()
-                    .forEach(actionMultipart -> {
-                        dtoSet.add(actionMultipartFromProto(actionMultipart));
-                    });
-            dto.setRequestMultipart(dtoSet);
+        /**
+         * @Note:- Mapping Multipart schema
+         */
+        if(!proto.getMultipartSchemaList().isEmpty()) {
+            Set<ApiTypeNodeDto> dtoSet = new LinkedHashSet<>();
+            proto.getMultipartSchemaList().forEach(n -> dtoSet.add(apiTypeNodeFromProto(n)));
+            dto.setMultipartSchema(dtoSet);
         }
 
+        /**
+         * @Note:- Mapping Header param
+         */
+        if(!proto.getRequestHeadersList().isEmpty()) {
+            Set<ApiTypeNodeDto> dtoSet = new LinkedHashSet<>();
+            proto.getRequestHeadersList().forEach(n -> dtoSet.add(apiTypeNodeFromProto(n)));
+            dto.setRequestHeaders(dtoSet);
+        }
+
+        /**
+         * @Note:- Mapping Request param
+         */
         if(!proto.getRequestParamsList().isEmpty()) {
-            Set<ActionParamDto> dtoSet = new LinkedHashSet<>();
-            proto.getRequestParamsList()
-                    .forEach(actionParam -> {
-                        dtoSet.add(actionParamFromProto(actionParam));
-                    });
+            Set<ApiTypeNodeDto> dtoSet = new LinkedHashSet<>();
+            proto.getRequestParamsList().forEach(n -> dtoSet.add(apiTypeNodeFromProto(n)));
             dto.setRequestParams(dtoSet);
         }
 
+        /**
+         * @Note:- Mapping User roles
+         */
         if (proto.hasUserRoles()) {
             Map<String, Map<Long, String>> userRoles = new HashMap<>();
             proto.getUserRoles().getEntriesMap().forEach((key, longStringMap) -> {
@@ -122,28 +133,125 @@ public class ProtoToDtoMapper {
         return dto;
     }
 
-    private static ActionModelDto actionModelFromProto(ActionModel proto) {
-        ActionModelDto dto = new ActionModelDto();
-        dto.setModelId(emptyToNull(proto.getModelId()));
-        dto.setKey(emptyToNull(proto.getKey()));
-        dto.setCollection(proto.getIsCollection());
-        return dto;
+//    private static ApiTypeNodeDto apiTypeNodeFromProto(ApiTypeNode proto) {
+//        if (proto == null)
+//            return null;
+//        ApiTypeNodeDto dto = new ApiTypeNodeDto();
+//        dto.setModelId(emptyToNull(proto.getModelId()));
+//        dto.setKey(emptyToNull(proto.getKey()));
+//        dto.setType(resolveFieldType(proto.getType()));
+//        dto.setRequired(proto.getRequired());
+//        dto.setMap(mapNodeFromProto(proto.getMap()));
+//        dto.setElement(apiTypeNodeFromProto(proto.getElement()));
+//        return dto;
+//    }
+
+    private static ApiTypeNodeDto apiTypeNodeFromProto(ApiTypeNode proto) {
+        if (proto == null) return null;
+
+        com.photon.endpoint.enums.BaseType type = fromProtoBaseType(proto.getType());
+
+        ApiTypeNodeDto.ApiTypeNodeDtoBuilder b = ApiTypeNodeDto.builder()
+                .key(emptyToNull(proto.getKey()))
+                .type(type)
+                .modelId(emptyToNull(proto.getModelId()))
+                .required(proto.getRequired());
+
+        // 🛑 HARD STOP — no recursion beyond these
+        switch (type) {
+            case STRING:
+            case INTEGER:
+            case LONG:
+            case BOOLEAN:
+            case FLOAT:
+            case DOUBLE:
+            case DATE:
+            case OBJECT:
+            case MULTIPART:
+            case UNKNOWN:
+                return b.build();
+        }
+
+        // ✅ LIST / SET
+        if ((type == com.photon.endpoint.enums.BaseType.LIST || type == com.photon.endpoint.enums.BaseType.SET)
+                && proto.hasElement()
+                && proto.getElement().getType() != com.photon.grpc.endpoint.BaseType.BASE_UNKNOWN) {
+
+            ApiTypeNodeDto element = apiTypeNodeFromProto(proto.getElement());
+            if (element != null) {
+                b.element(element);
+            }
+        }
+
+        // DTO
+        if ((type == com.photon.endpoint.enums.BaseType.DTO)
+                && proto.hasElement()
+                && proto.getElement().getType() != com.photon.grpc.endpoint.BaseType.BASE_UNKNOWN) {
+
+            ApiTypeNodeDto element = apiTypeNodeFromProto(proto.getElement());
+            if (element != null) {
+                b.element(element);
+            }
+        }
+
+        // ✅ MAP
+        if (type == com.photon.endpoint.enums.BaseType.MAP && proto.hasMap()) {
+            MapNodeDto map = mapNodeFromProto(proto.getMap());
+            if (map != null) {
+                b.map(map);
+            }
+        }
+
+        return b.build();
     }
 
-    private static ActionMultipartDto actionMultipartFromProto(ActionMultipart proto) {
-        ActionMultipartDto dto = new ActionMultipartDto();
-        dto.setKey(emptyToNull(proto.getKey()));
-        dto.setCollection(proto.getIsCollection());
-        return dto;
-    }
+//    private static MapNodeDto mapNodeFromProto(MapNode proto) {
+//        if (proto == null)
+//            return null;
+//        MapNodeDto dto = new MapNodeDto();
+//        dto.setKey(apiTypeNodeFromProto(proto.getKey()));
+//        dto.setValue(apiTypeNodeFromProto(proto.getValue()));
+//        return dto;
+//    }
 
-    private static ActionParamDto actionParamFromProto(ActionParam proto) {
-        ActionParamDto dto = new ActionParamDto();
-        dto.setKey(emptyToNull(proto.getKey()));
-        dto.setType(resolveFieldType(proto.getType()));
-        dto.setRequired(proto.getRequired());
-        dto.setCollection(proto.getIsCollection());
-        return dto;
+//    private static MapNodeDto mapNodeFromProto(MapNode proto) {
+//        if (proto == null) return null;
+//
+//        MapNodeDto.MapNodeDtoBuilder b = MapNodeDto.builder();
+//
+//        if (proto.hasKey()) {
+//            b.key(apiTypeNodeFromProto(proto.getKey()));
+//        }
+//
+//        if (proto.hasValue()) {
+//            b.value(apiTypeNodeFromProto(proto.getValue()));
+//        }
+//
+//        return b.build();
+//    }
+
+    private static MapNodeDto mapNodeFromProto(MapNode proto) {
+        if (proto == null) return null;
+
+        ApiTypeNodeDto key = null;
+        ApiTypeNodeDto value = null;
+
+        if (proto.hasKey() && proto.getKey().getType() != com.photon.grpc.endpoint.BaseType.BASE_UNKNOWN) {
+            key = apiTypeNodeFromProto(proto.getKey());
+        }
+
+        if (proto.hasValue() && proto.getValue().getType() != com.photon.grpc.endpoint.BaseType.BASE_UNKNOWN) {
+            value = apiTypeNodeFromProto(proto.getValue());
+        }
+
+        if (key == null && value == null) {
+            return null;
+        }
+
+        return MapNodeDto.builder()
+                .key(key)
+                .value(value)
+                .build();
     }
 
     private static ModelDescriptionDto modelFromProto(ModelDescription proto) {
@@ -191,6 +299,18 @@ public class ProtoToDtoMapper {
                 return com.photon.endpoint.enums.BaseType.UNKNOWN;
             }
         } else {
+            return com.photon.endpoint.enums.BaseType.UNKNOWN;
+        }
+    }
+
+    private static com.photon.endpoint.enums.BaseType fromProtoBaseType(com.photon.grpc.endpoint.BaseType proto) {
+        if (proto == null || proto == com.photon.grpc.endpoint.BaseType.BASE_UNKNOWN) {
+            return com.photon.endpoint.enums.BaseType.UNKNOWN;
+        }
+
+        try {
+            return com.photon.endpoint.enums.BaseType.valueOf(proto.name().replace("BASE_", ""));
+        } catch (Exception e) {
             return com.photon.endpoint.enums.BaseType.UNKNOWN;
         }
     }

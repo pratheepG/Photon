@@ -11,7 +11,6 @@ import com.photon.endpoint.utils.ResponseModelTypeResolver;
 import com.photon.enums.ExceptionEnum;
 import com.photon.exception.ApplicationException;
 import com.photon.properties.ApplicationConfigProperties;
-import com.photon.utils.PhotonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.ApplicationContext;
@@ -23,9 +22,7 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,187 +31,125 @@ import java.util.stream.Collectors;
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class EndpointScannerService {
 
-    private final ApplicationConfigProperties applicationConfigProperties;
+    private final ApplicationConfigProperties config;
     private final RequestMappingHandlerMapping handlerMapping;
     private final ApplicationContext applicationContext;
 
-    public EndpointScannerService(ApplicationConfigProperties applicationConfigProperties,
+    public EndpointScannerService(ApplicationConfigProperties config,
                                   RequestMappingHandlerMapping requestMappingHandlerMapping,
                                   ApplicationContext applicationContext) {
-        this.applicationConfigProperties = applicationConfigProperties;
+        this.config = config;
         this.handlerMapping = requestMappingHandlerMapping;
         this.applicationContext = applicationContext;
     }
+
+    // ==========================================================
+    // PUBLIC API
+    // ==========================================================
 
     public ApiResponseDto<EndpointDetailsDto> scanEndpoints() {
         try {
             Map<RequestMappingInfo, HandlerMethod> mappings = handlerMapping.getHandlerMethods();
             String[] beanNames = applicationContext.getBeanNamesForAnnotation(FeatureInfo.class);
 
-            Set<Class<?>> annotatedClasses = Arrays.stream(beanNames)
+            Set<Class<?>> controllers = Arrays.stream(beanNames)
                     .map(applicationContext::getType)
-                    .peek(nameType -> {
-                        // debug output for beans that might resolve to null type
-                        // nothing to do here; peek is only for side-effects if needed
-                    })
                     .filter(Objects::nonNull)
                     .collect(Collectors.toSet());
 
             EndpointDetailsDto endpointDetails = new EndpointDetailsDto();
-            Set<FeatureInfoDto> features = new HashSet<>();
+            Set<FeatureInfoDto> features = new LinkedHashSet<>();
             Set<Class<?>> seenDtoClasses = new HashSet<>();
-            Set<ModelDescriptionDto> dtoDescriptions = new HashSet<>();
+            Set<ModelDescriptionDto> dtoDescriptions = new LinkedHashSet<>();
 
-            for (Class<?> clazz : annotatedClasses) {
-                try {
-                    FeatureInfo featureInfo = clazz.getAnnotation(FeatureInfo.class);
-                    if (featureInfo == null) {
-                        log.warn("@FeatureInfo not present on class {} despite bean registration — skipping", clazz.getName());
-                        continue;
-                    }
+            for (Class<?> controller : controllers) {
 
-                    String basePath = "";
-                    RequestMapping classMapping = clazz.getAnnotation(RequestMapping.class);
-                    if (classMapping != null && classMapping.value().length > 0) {
-                        basePath = classMapping.value()[0];
-                    }
+                FeatureInfo featureInfo = controller.getAnnotation(FeatureInfo.class);
+                if (featureInfo == null) continue;
 
-                    Set<ActionInfoDto> actions = new HashSet<>();
+                String basePath = resolveBasePath(controller);
+                Set<ActionInfoDto> actions = new LinkedHashSet<>();
 
-                    for (Method method : clazz.getDeclaredMethods()) {
-                        try {
-                            if (!method.isAnnotationPresent(ActionInfo.class)) {
-                                continue;
-                            }
+                for (Method method : controller.getDeclaredMethods()) {
 
-                            ActionInfo actionInfo = method.getAnnotation(ActionInfo.class);
-                            if (actionInfo == null) {
-                                log.warn("Method {} in {} declared @ActionInfo but annotation returned null — skipping method", method.getName(), clazz.getName());
-                                continue;
-                            }
+                    if (!method.isAnnotationPresent(ActionInfo.class)) continue;
+                    ActionInfo actionInfo = method.getAnnotation(ActionInfo.class);
 
-                            //-- Request body
-                            ActionModelDto requestBody = null;
-                            for (Parameter parameter : method.getParameters()) {
-                                if (parameter.isAnnotationPresent(RequestBody.class)) {
-                                    requestBody = new ActionModelDto();
-                                    Type paramType = parameter.getParameterizedType();
-                                    ResponseModelTypeResolver.Result reqResult = ResponseModelTypeResolver.resolve(paramType);
-                                    Class<?> reqDto = reqResult.getModelClass();
-                                    if (reqDto != null) {
-                                        requestBody.setModelId(reqDto.getCanonicalName());
-                                        requestBody.setKey(parameter.getName());
-                                        requestBody.setCollection(reqResult.isCollection());
-                                        if (seenDtoClasses.add(reqDto)) {
-                                            dtoDescriptions.addAll(ModelIntrospector.buildDtoGraph(reqDto));
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
+                    ApiTypeNodeDto requestSchema = null;
+                    ApiTypeNodeDto responseSchema = null;
+                    Set<ApiTypeNodeDto> multipartSchema = new LinkedHashSet<>();
+                    Set<ApiTypeNodeDto> requestHeaders = new LinkedHashSet<>();
+                    Set<ApiTypeNodeDto> requestParams = new LinkedHashSet<>();
 
-                            //-- Request param
-                            Set<ActionParamDto> requestParams = new HashSet<>();
-                            for (Parameter parameter : method.getParameters()) {
-                                if (parameter.isAnnotationPresent(RequestParam.class)) {
-                                    RequestParam rp = parameter.getAnnotation(RequestParam.class);
-                                    Type paramType = parameter.getParameterizedType();
-                                    ResponseModelTypeResolver.Result reqResult = ResponseModelTypeResolver.resolve(paramType);
-                                    Class<?> reqDto = reqResult.getModelClass();
-                                    if (reqDto != null) {
-                                        ActionParamDto  requestParam = new ActionParamDto();
-                                        requestParam.setType(resolveBaseType(parameter));
-                                        requestParam.setKey(resolveRequestParamKey(parameter));
-                                        requestParam.setCollection(reqResult.isCollection());
-                                        requestParam.setRequired(rp.required());
-                                        requestParams.add(requestParam);
-                                    }
-                                }
-                            }
+                    // ---------- Parameters ----------
+                    for (Parameter p : method.getParameters()) {
 
-                            //-- Multipart request
-                            Set<ActionMultipartDto> requestMultipartBodySet = new HashSet<>();
-                            for (Parameter parameter : method.getParameters()) {
-                                if (parameter.isAnnotationPresent(RequestPart.class)) {
-                                    Type paramType = parameter.getParameterizedType();
-                                    ResponseModelTypeResolver.Result reqResult = ResponseModelTypeResolver.resolve(paramType);
-                                    Class<?> reqDto = reqResult.getModelClass();
-                                    if (reqDto != null) {
-                                        ActionMultipartDto requestMultipartBody = new ActionMultipartDto();
-                                        requestMultipartBody.setKey(parameter.getName());
-                                        requestMultipartBody.setCollection(reqResult.isCollection());
-                                        requestMultipartBodySet.add(requestMultipartBody);
-                                    }
-                                }
-                            }
+                        if (p.isAnnotationPresent(RequestBody.class)) {
+                            requestSchema = buildApiTypeNode(p.getParameterizedType(), p.getName(), true, seenDtoClasses, dtoDescriptions);
+                        }
 
-                            //-- Response body
-                            ResponseModelTypeResolver.Result resResult = ResponseModelTypeResolver.resolve(method.getGenericReturnType());
-                            ActionModelDto responseBody = new ActionModelDto();
-                            if (resResult.getModelClass() != null) {
-                                responseBody.setCollection(resResult.isCollection());
-                                responseBody.setModelId(resResult.getModelClass().getCanonicalName());
-                                if (seenDtoClasses.add(resResult.getModelClass())) {
-                                    dtoDescriptions.addAll(ModelIntrospector.buildDtoGraph(resResult.getModelClass()));
-                                }
+                        if (p.isAnnotationPresent(RequestPart.class)) {
+                            multipartSchema.add(buildApiTypeNode(p.getParameterizedType(), p.getName(), true, seenDtoClasses, dtoDescriptions));
+                        }
 
-                                if (resResult.getCollectionDepth() > 1) {
-                                    log.warn("Nested collection depth in return type of method '{}.{}'", clazz.getName(), method.getName());
-                                }
-                            }
+                        if (p.isAnnotationPresent(RequestHeader.class)) {
+                            RequestHeader rh = p.getAnnotation(RequestHeader.class);
+                            requestHeaders.add(buildApiTypeNode(p.getParameterizedType(), resolveHeaderKey(p), rh.required(), seenDtoClasses, dtoDescriptions));
+                        }
 
-                            // find matching handler mapping entry
-                            for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : mappings.entrySet()) {
-                                HandlerMethod handler = entry.getValue();
-                                if (handler == null) {
-                                    continue;
-                                }
-                                if (!handler.getMethod().equals(method)) {
-                                    continue;
-                                }
-
-                                RequestMappingInfo mappingInfo = entry.getKey();
-                                String fullPath = resolveFirstPattern(mappingInfo, basePath);
-                                RequestMethod httpMethod = resolveFirstHttpMethod(mappingInfo);
-
-                                actions.add(ActionInfoDto.builder()
-                                        .actionId(actionInfo.id())
-                                        .name(actionInfo.name())
-                                        .description(actionInfo.description())
-                                        .featureId(featureInfo.id())
-                                        .path(fullPath)
-                                        .requestMethod(httpMethod)
-                                        .accessLevel((featureInfo.accessLevel().equals(AccessLevel.NONE)) ? actionInfo.accessLevel() : featureInfo.accessLevel())
-                                        .securityLevel(actionInfo.securityLevel())
-                                        .requestModel(requestBody)
-                                        .requestMultipart(requestMultipartBodySet)
-                                        .requestParams(requestParams)
-                                        .responseModel(responseBody)
-                                        .operationName(method.getName())
-                                        .build());
-                            }
-                        } catch (Exception me) {
-                            log.error("Error scanning method {}.{} — skipping method: {}", clazz.getName(), method.getName(), me.getMessage(), me);
+                        if (p.isAnnotationPresent(RequestParam.class)) {
+                            RequestParam rp = p.getAnnotation(RequestParam.class);
+                            requestParams.add(buildApiTypeNode(p.getParameterizedType(), resolveRequestParamKey(p), rp.required(), seenDtoClasses, dtoDescriptions));
                         }
                     }
 
-                    features.add(FeatureInfoDto.builder()
-                            .featureId(featureInfo.id())
-                            .name(featureInfo.name())
-                            .moduleName(clazz.getSimpleName())
-                            .path(basePath)
-                            .description(featureInfo.description())
-                            .actions(actions)
-                            .build());
-                } catch (Exception ce) {
-                    log.error("Error scanning class {} — skipping class: {}", clazz == null ? "null" : clazz.getName(), ce.getMessage(), ce);
+                    // ---------- Response ----------
+                    ResponseModelTypeResolver.Result resResult = ResponseModelTypeResolver.resolve(method.getGenericReturnType());
+
+                    if (resResult.getModelClass() != null) {
+                        //Type resolvedResponseType = unwrapResponseWrappers(method.getGenericReturnType());
+                        responseSchema = buildResponseSchema(method.getGenericReturnType(), seenDtoClasses, dtoDescriptions);
+                    }
+
+                    // ---------- Mapping ----------
+                    for (Map.Entry<RequestMappingInfo, HandlerMethod> e : mappings.entrySet()) {
+                        if (!e.getValue().getMethod().equals(method)) continue;
+
+                        RequestMappingInfo info = e.getKey();
+
+                        actions.add(ActionInfoDto.builder()
+                                .actionId(actionInfo.id())
+                                .name(actionInfo.name())
+                                .description(actionInfo.description())
+                                .featureId(featureInfo.id())
+                                .path(resolveFirstPattern(info, basePath))
+                                .requestMethod(resolveFirstHttpMethod(info))
+                                .accessLevel(featureInfo.accessLevel() == AccessLevel.NONE ? actionInfo.accessLevel() : featureInfo.accessLevel())
+                                .securityLevel(actionInfo.securityLevel())
+                                .requestSchema(requestSchema)
+                                .multipartSchema(multipartSchema)
+                                .responseSchema(responseSchema)
+                                .requestHeaders(requestHeaders)
+                                .requestParams(requestParams)
+                                .operationName(method.getName())
+                                .build());
+                    }
                 }
+
+                features.add(FeatureInfoDto.builder()
+                        .featureId(featureInfo.id())
+                        .name(featureInfo.name())
+                        .moduleName(controller.getSimpleName())
+                        .path(basePath)
+                        .description(featureInfo.description())
+                        .actions(actions)
+                        .build());
             }
 
-            endpointDetails.setId(this.applicationConfigProperties.getApplicationName());
-            endpointDetails.setName(this.applicationConfigProperties.getApplicationName());
-            endpointDetails.setClientId(this.applicationConfigProperties.getXApiKey());
-            endpointDetails.setClientSecret(this.applicationConfigProperties.getXApiSecret());
+            endpointDetails.setId(config.getApplicationName());
+            endpointDetails.setName(config.getApplicationName());
+            endpointDetails.setClientId(config.getXApiKey());
+            endpointDetails.setClientSecret(config.getXApiSecret());
             endpointDetails.setModels(dtoDescriptions);
             endpointDetails.setFeatures(features);
 
@@ -225,149 +160,182 @@ public class EndpointScannerService {
                     .build();
 
         } catch (Exception e) {
-            log.error("Error scanning endpoints: {}", e.getMessage(), e);
-            throw new ApplicationException(ExceptionEnum.ERR_1009.getErrorResponseBody(e.getMessage()), HttpStatus.OK);
+            log.error("Endpoint scan failed", e);
+            throw new ApplicationException(
+                    ExceptionEnum.ERR_1009.getErrorResponseBody(e.getMessage()),
+                    HttpStatus.OK
+            );
         }
     }
 
-    /**
-     * Resolve first pattern from RequestMappingInfo safely.
-     * Falls back to defaultPath when no pattern is available.
-     * Supports both legacy PatternsRequestCondition and newer PathPatternsRequestCondition (via reflection).
-     */
-    private String resolveFirstPattern(RequestMappingInfo mappingInfo, String defaultPath) {
-        if (mappingInfo == null) {
-            return defaultPath;
+    // ==========================================================
+    // TYPE TREE BUILDER (CORE FIX)
+    // ==========================================================
+
+    private ApiTypeNodeDto buildApiTypeNode(Type type, String key, boolean required, Set<Class<?>> seenDtoClasses, Set<ModelDescriptionDto> dtoDescriptions) {
+
+        ApiTypeNodeDto.ApiTypeNodeDtoBuilder b = ApiTypeNodeDto.builder().key(key).required(required);
+
+        // ---------- Parameterized ----------
+        if (type instanceof ParameterizedType pt) {
+            Type raw = pt.getRawType();
+
+            if (raw instanceof Class<?> rawClass) {
+
+                // LIST / SET
+                if (Collection.class.isAssignableFrom(rawClass)) {
+                    b.type(Set.class.isAssignableFrom(rawClass) ? BaseType.SET : BaseType.LIST);
+                    b.element(buildApiTypeNode(pt.getActualTypeArguments()[0], null, true, seenDtoClasses, dtoDescriptions));
+                    return b.build();
+                }
+
+                // MAP
+                if (Map.class.isAssignableFrom(rawClass)) {
+                    b.type(BaseType.MAP);
+                    b.map(MapNodeDto.builder()
+                            .key(buildApiTypeNode(pt.getActualTypeArguments()[0], null, true, seenDtoClasses, dtoDescriptions))
+                            .value(buildApiTypeNode(pt.getActualTypeArguments()[1], null, true, seenDtoClasses, dtoDescriptions))
+                            .build());
+                    return b.build();
+                }
+            }
         }
 
-        try {
-            // 1) legacy approach
-            PatternsRequestCondition patternsCondition = mappingInfo.getPatternsCondition();
-            if (patternsCondition != null) {
-                return patternsCondition.getPatterns().stream().findFirst().orElse(defaultPath);
+        // ---------- Raw class ----------
+        if (type instanceof Class<?> clazz) {
+
+            BaseType base = resolveBaseType(clazz);
+            if (base != BaseType.OBJECT) {
+                b.type(base);
+                return b.build();
             }
 
-            // 2) try newer PathPatternsRequestCondition via reflection (to remain compatible across Spring versions)
-            try {
-                Object pathCond = mappingInfo.getClass().getMethod("getPathPatternsCondition").invoke(mappingInfo);
-                if (pathCond != null) {
-                    // try getPatternValues() first
-                    try {
-                        Object values = pathCond.getClass().getMethod("getPatternValues").invoke(pathCond);
-                        if (values instanceof Collection) {
-                            Collection<?> coll = (Collection<?>) values;
-                            if (!coll.isEmpty()) {
-                                return String.valueOf(coll.iterator().next());
-                            }
-                        }
-                    } catch (NoSuchMethodException nsme) {
-                        // fallback to getPatterns() on the pathCond object if available
-                        try {
-                            Object patterns = pathCond.getClass().getMethod("getPatterns").invoke(pathCond);
-                            if (patterns instanceof Collection) {
-                                Collection<?> coll = (Collection<?>) patterns;
-                                if (!coll.isEmpty()) {
-                                    return String.valueOf(coll.iterator().next());
-                                }
-                            }
-                        } catch (NoSuchMethodException ignore) {
-                            // nothing else to try
-                        }
+            b.type(BaseType.DTO);
+            b.modelId(clazz.getCanonicalName());
+
+            if (seenDtoClasses.add(clazz)) {
+                dtoDescriptions.addAll(ModelIntrospector.buildDtoGraph(clazz));
+            }
+            return b.build();
+        }
+
+        b.type(BaseType.UNKNOWN);
+        return b.build();
+    }
+
+
+    private Type unwrapTransport(Type type) {
+
+        while (type instanceof ParameterizedType pt) {
+            Type raw = pt.getRawType();
+
+            if (!(raw instanceof Class<?> rawClass)) break;
+
+            // Reactive wrappers
+            if (rawClass.getName().equals("reactor.core.publisher.Mono") ||
+                    rawClass.getName().equals("reactor.core.publisher.Flux")) {
+                type = pt.getActualTypeArguments()[0];
+                continue;
+            }
+
+            // HTTP wrapper
+            if (rawClass == org.springframework.http.ResponseEntity.class) {
+                type = pt.getActualTypeArguments()[0];
+                continue;
+            }
+
+            break;
+        }
+        return type;
+    }
+
+    private ApiTypeNodeDto buildResponseSchema(Type returnType, Set<Class<?>> seenDtoClasses, Set<ModelDescriptionDto> dtoDescriptions) {
+
+        /* 1️⃣ unwrap Mono / Flux / ResponseEntity */
+        Type type = unwrapTransport(returnType);
+
+        /* 2️⃣ ApiResponseDto<T> */
+        if (type instanceof ParameterizedType pt &&
+                pt.getRawType() instanceof Class<?> raw &&
+                raw == com.photon.dto.ApiResponseDto.class) {
+
+            ApiTypeNodeDto.ApiTypeNodeDtoBuilder parent = ApiTypeNodeDto.builder()
+                    .key("-")
+                    .type(BaseType.DTO)
+                    .modelId(raw.getCanonicalName())
+                    .required(true);
+
+            // 🔹 Defensive: check inner payload existence
+            Type[] args = pt.getActualTypeArguments();
+            if (args != null && args.length == 1) {
+
+                Type inner = args[0];
+
+                // 🔹 Ignore meaningless payloads
+                if (inner != null && inner != Void.class && inner != void.class
+                        && inner != Object.class && !(inner instanceof WildcardType)) {
+
+                    ApiTypeNodeDto payload = buildApiTypeNode(inner, null, true, seenDtoClasses, dtoDescriptions);
+
+                    if (payload != null && payload.getType() != BaseType.UNKNOWN) {
+                        parent.element(payload);
                     }
                 }
-            } catch (NoSuchMethodException ignored) {
-                // running on older Spring where getPathPatternsCondition doesn't exist
             }
-        } catch (Exception ex) {
-            log.debug("Error while resolving mapping patterns: {}", ex.getMessage());
+
+            return parent.build();
         }
 
-        return defaultPath;
+        /* 3️⃣ Normal response (no ApiResponseDto) */
+        return buildApiTypeNode(type, "-", true, seenDtoClasses, dtoDescriptions);
     }
 
-    /**
-     * Resolve first HTTP method from RequestMappingInfo safely. Defaults to GET when none present.
-     */
-    private RequestMethod resolveFirstHttpMethod(RequestMappingInfo mappingInfo) {
-        if (mappingInfo == null) {
-            return RequestMethod.GET;
+
+    // ==========================================================
+    // HELPERS
+    // ==========================================================
+    private String resolveBasePath(Class<?> clazz) {
+        RequestMapping rm = clazz.getAnnotation(RequestMapping.class);
+        return (rm != null && rm.value().length > 0) ? rm.value()[0] : "";
+    }
+
+    private String resolveRequestParamKey(Parameter p) {
+        RequestParam rp = p.getAnnotation(RequestParam.class);
+        if (!rp.name().isEmpty()) return rp.name();
+        if (!rp.value().isEmpty()) return rp.value();
+        return p.getName();
+    }
+
+    private String resolveHeaderKey(Parameter p) {
+        RequestHeader rh = p.getAnnotation(RequestHeader.class);
+        if (!rh.name().isEmpty()) return rh.name();
+        if (!rh.value().isEmpty()) return rh.value();
+        return p.getName();
+    }
+
+    private String resolveFirstPattern(RequestMappingInfo info, String fallback) {
+        PatternsRequestCondition pc = info.getPatternsCondition();
+        if (pc != null && !pc.getPatterns().isEmpty()) {
+            return pc.getPatterns().iterator().next();
         }
-        try {
-            if (mappingInfo.getMethodsCondition() != null && !mappingInfo.getMethodsCondition().getMethods().isEmpty()) {
-                return mappingInfo.getMethodsCondition().getMethods().stream().findFirst().orElse(RequestMethod.GET);
-            }
-        } catch (Exception ex) {
-            log.debug("Error while resolving request method: {}", ex.getMessage());
+        return fallback;
+    }
+
+    private RequestMethod resolveFirstHttpMethod(RequestMappingInfo info) {
+        if (!info.getMethodsCondition().getMethods().isEmpty()) {
+            return info.getMethodsCondition().getMethods().iterator().next();
         }
         return RequestMethod.GET;
     }
 
-    private BaseType resolveBaseType(Parameter parameter) {
-
-        Class<?> type = parameter.getType();
-
-        // --- Collection types ---
-        if (Collection.class.isAssignableFrom(type)) {
-            if (Set.class.isAssignableFrom(type)) {
-                return BaseType.SET;
-            }
-            return BaseType.LIST;
-        }
-
-        if (Map.class.isAssignableFrom(type)) {
-            return BaseType.MAP;
-        }
-
-        // --- Primitive & wrapper types ---
-        if (type.equals(String.class)) {
-            return BaseType.STRING;
-        }
-        if (type.equals(Integer.class) || type.equals(int.class)) {
-            return BaseType.INTEGER;
-        }
-        if (type.equals(Long.class) || type.equals(long.class)) {
-            return BaseType.LONG;
-        }
-        if (type.equals(Boolean.class) || type.equals(boolean.class)) {
-            return BaseType.BOOLEAN;
-        }
-        if (type.equals(Float.class) || type.equals(float.class)) {
-            return BaseType.FLOAT;
-        }
-        if (type.equals(Double.class) || type.equals(double.class)) {
-            return BaseType.DOUBLE;
-        }
-
-        // --- Date types ---
-        if (Date.class.isAssignableFrom(type) ||
-                type.getName().startsWith("java.time")) {
-            return BaseType.DATE;
-        }
-
-        // --- Fallback ---
-        if (!type.isPrimitive() && !type.getName().startsWith("java.")) {
-            return BaseType.OBJECT;
-        }
-
-        return BaseType.UNKNOWN;
+    private BaseType resolveBaseType(Class<?> type) {
+        if (type == String.class) return BaseType.STRING;
+        if (type == Integer.class || type == int.class) return BaseType.INTEGER;
+        if (type == Long.class || type == long.class) return BaseType.LONG;
+        if (type == Boolean.class || type == boolean.class) return BaseType.BOOLEAN;
+        if (type == Float.class || type == float.class) return BaseType.FLOAT;
+        if (type == Double.class || type == double.class) return BaseType.DOUBLE;
+        if (Date.class.isAssignableFrom(type) || type.getName().startsWith("java.time")) return BaseType.DATE;
+        return BaseType.OBJECT;
     }
-
-    private String resolveRequestParamKey(Parameter parameter) {
-        RequestParam rp = parameter.getAnnotation(RequestParam.class);
-
-        if (rp == null) {
-            return parameter.getName();
-        }
-
-        if (!rp.name().isEmpty()) {
-            return rp.name();
-        }
-
-        if (!rp.value().isEmpty()) {
-            return rp.value();
-        }
-
-        return parameter.getName();
-    }
-
 }

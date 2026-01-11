@@ -1,5 +1,6 @@
 package com.photon.identity.commons.grpc.client;
 
+import com.photon.bootstrap.ProtoEndpointRegistrationRunner;
 import com.photon.dto.ReportingParamsDto;
 import com.photon.enums.ExceptionEnum;
 import com.photon.exception.ApplicationException;
@@ -17,7 +18,7 @@ public class DeviceSyncService {
 
     @GrpcClient("alert")
     private DeviceInfoServiceGrpc.DeviceInfoServiceBlockingStub deviceServiceBlockingStub;
-
+    //ProtoEndpointRegistrationRunner;
     //private final DeviceInfoServiceGrpc.DeviceInfoServiceBlockingStub deviceServiceBlockingStub;
 
 //    public DeviceSyncService(DeviceInfoServiceGrpc.DeviceInfoServiceBlockingStub deviceServiceBlockingStub) {

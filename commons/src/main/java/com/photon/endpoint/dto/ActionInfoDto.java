@@ -35,10 +35,11 @@ public class ActionInfoDto {
     private FeatureInfoDto feature;
     
     private String operationName;
-    private Set<ActionParamDto> requestParams = new HashSet<>();
-    private ActionModelDto responseModel;
-    private ActionModelDto requestModel;
-    private Set<ActionMultipartDto> requestMultipart = new HashSet<>();
+    private Set<ApiTypeNodeDto> requestParams = new HashSet<>();
+    private Set<ApiTypeNodeDto> requestHeaders = new HashSet<>();
+    private ApiTypeNodeDto responseSchema;
+    private ApiTypeNodeDto requestSchema;
+    private Set<ApiTypeNodeDto> multipartSchema = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

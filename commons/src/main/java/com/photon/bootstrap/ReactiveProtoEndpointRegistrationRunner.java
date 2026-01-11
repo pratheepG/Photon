@@ -6,8 +6,6 @@ import com.photon.grpc.endpoint.EndpointRegistryGrpc;
 import com.photon.grpc.endpoint.RegisterResponse;
 import com.photon.endpoint.dto.mapper.DtoProtoMapper;
 import com.photon.properties.ApplicationConfigProperties;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.boot.ApplicationArguments;
@@ -26,34 +24,18 @@ public class ReactiveProtoEndpointRegistrationRunner implements ApplicationRunne
 
     private final ReactiveEndpointScannerService endpointScannerService;
     private final ApplicationConfigProperties applicationConfigProperties;
+    private final EndpointRegistryGrpc.EndpointRegistryBlockingStub blockingStub;
 
-    @GrpcClient("console")
-    private EndpointRegistryGrpc.EndpointRegistryBlockingStub blockingStub;
-
-    public ReactiveProtoEndpointRegistrationRunner(ReactiveEndpointScannerService endpointScannerService,
-                                                   ApplicationConfigProperties applicationConfigProperties) {
+    public ReactiveProtoEndpointRegistrationRunner(
+            @GrpcClient("console") EndpointRegistryGrpc.EndpointRegistryBlockingStub blockingStub,
+            ReactiveEndpointScannerService endpointScannerService, ApplicationConfigProperties applicationConfigProperties) {
         this.endpointScannerService = endpointScannerService;
+        this.blockingStub = blockingStub;
         this.applicationConfigProperties = applicationConfigProperties;
     }
 
     @Override
     public void run(ApplicationArguments args) {
-
-        String host = applicationConfigProperties.getConsoleGrpcHost();
-        int port = applicationConfigProperties.getConsoleGrpcPort();
-
-        if (host == null || host.isBlank() || port <= 0) {
-            log.info("Console gRPC host/port not configured. Skipping gRPC endpoint registration.");
-            return;
-        }
-
-//        ManagedChannel channel = ManagedChannelBuilder
-//                .forAddress(host, port)
-//                .usePlaintext()
-//                .build();
-
-//        EndpointRegistryGrpc.EndpointRegistryBlockingStub blockingStub =
-//                EndpointRegistryGrpc.newBlockingStub(channel);
 
         endpointScannerService.scanEndpoints()
                 .map(response -> {
@@ -79,7 +61,6 @@ public class ReactiveProtoEndpointRegistrationRunner implements ApplicationRunne
                 .doOnError(e -> log.error("Error while registering endpoints via gRPC", e))
                 .doFinally(signal -> {
                     log.info("Shutting down gRPC channel, signal={}", signal);
-                    //channel.shutdownNow();
                 })
                 .subscribe();
     }
