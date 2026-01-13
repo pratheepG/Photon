@@ -31,7 +31,6 @@ public class MultiTypeDeserializer implements Deserializer<Object> {
                         .getMethod("parseFrom", byte[].class)
                         .invoke(null, (Object) data);
             } catch (Exception e) {
-                e.printStackTrace();
                 throw new RuntimeException("Failed to deserialize Protobuf message from topic: " + topic, e);
             }
         }
@@ -39,7 +38,6 @@ public class MultiTypeDeserializer implements Deserializer<Object> {
         try {
             return objectMapper.readValue(data, String.class);
         } catch (Exception jsonException) {
-            jsonException.printStackTrace();
             throw new RuntimeException("Unknown message format from topic: " + topic, jsonException);
         }
     }

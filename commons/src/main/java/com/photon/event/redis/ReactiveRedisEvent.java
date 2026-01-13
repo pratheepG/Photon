@@ -1,5 +1,8 @@
 package com.photon.event.redis;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.photon.event.EventListener;
+import com.photon.event.EventListenerConfig;
 import com.photon.event.EventManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -77,5 +80,10 @@ public class ReactiveRedisEvent implements EventManager {
                 .doOnError(e -> log.error("❌ Async publish failed for topic: {}", topic, e))
                 .then()
                 .toFuture();
+    }
+
+    @Override
+    public <T> EventListener<T> createListener(EventListenerConfig<T> config) {
+        return new ReactiveRedisEventListener<>(redisTemplate, new ObjectMapper(), config);
     }
 }

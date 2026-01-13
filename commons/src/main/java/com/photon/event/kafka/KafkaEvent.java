@@ -1,5 +1,7 @@
 package com.photon.event.kafka;
 
+import com.photon.event.EventListener;
+import com.photon.event.EventListenerConfig;
 import com.photon.event.EventManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -22,5 +24,10 @@ final public class KafkaEvent implements EventManager {
     @Override
     public void publish(String topic, Object message) {
 
+    }
+
+    @Override
+    public <T> EventListener<T> createListener(EventListenerConfig<T> config) {
+        return null;
     }
 }

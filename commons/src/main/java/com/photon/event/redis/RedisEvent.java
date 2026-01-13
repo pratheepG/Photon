@@ -1,5 +1,8 @@
 package com.photon.event.redis;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.photon.event.EventListener;
+import com.photon.event.EventListenerConfig;
 import com.photon.event.EventManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -21,8 +24,7 @@ public class RedisEvent implements EventManager {
     private final RedisMessageListenerContainer listenerContainer;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public RedisEvent(RedisMessageListenerContainer listenerContainer,
-                      RedisTemplate<String, Object> redisTemplate) {
+    public RedisEvent(RedisMessageListenerContainer listenerContainer, RedisTemplate<String, Object> redisTemplate) {
         this.listenerContainer = listenerContainer;
         this.redisTemplate = redisTemplate;
         log.info("RedisEvent initialized successfully");
@@ -76,5 +78,10 @@ public class RedisEvent implements EventManager {
                 log.error("Failed to async publish message to topic: {}", topic, e);
             }
         });
+    }
+
+    @Override
+    public <T> EventListener<T> createListener(EventListenerConfig<T> config) {
+        return new RedisEventListener<>(this.listenerContainer, new ObjectMapper(), config);
     }
 }
